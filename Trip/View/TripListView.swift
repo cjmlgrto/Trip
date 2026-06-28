@@ -19,53 +19,58 @@ struct TripListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(days) { day in
-                    let segments = visibleSegments(in: day)
-                    if !segments.isEmpty {
-                        DayHeaderView(title: DateText.longDate(day.date), summary: day.label)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 24, leading: 16, bottom: 8, trailing: 16))
-
-                        ForEach(segments) { segment in
-                            NavigationLink(value: segment) {
-                                SegmentRow(segment: segment, isCurrent: segment.id == currentSegmentID)
-                            }
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
-                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                completeButton(for: segment)
-                            }
-                        }
-                    }
-                }
-
-                if isEmpty {
-                    ContentUnavailableView.search(text: search)
-                }
-            }
-            .listStyle(.plain)
-            .navigationTitle("Your Trip")
-            .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
-            .searchable(text: $search, prompt: "Search")
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Menu {
-                        Toggle(isOn: $hideCompleted) {
-                            Label("Hide Completed", systemImage: "checkmark.circle")
-                        }
-                    } label: {
-                        Label("Filter", systemImage: hideCompleted
-                              ? "line.3.horizontal.decrease.circle.fill"
-                              : "line.3.horizontal.decrease")
-                    }
-                }
-                ToolbarSpacer(.flexible, placement: .bottomBar)
-                DefaultToolbarItem(kind: .search, placement: .bottomBar)
-            }
-            .task { Seeding.seedIfNeeded(context) }
-            .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
+            itinerary
         }
+    }
+
+    private var itinerary: some View {
+        // Computed once per render — not once per row.
+        let currentID = currentSegmentID
+        let sections = visibleSections
+
+        return List {
+            ForEach(sections) { section in
+                DayHeaderView(title: DateText.longDate(section.day.date), summary: section.day.label)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.init(top: 24, leading: 16, bottom: 8, trailing: 16))
+
+                ForEach(section.segments) { segment in
+                    NavigationLink(value: segment) {
+                        SegmentRow(segment: segment, isCurrent: segment.id == currentID)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        completeButton(for: segment)
+                    }
+                }
+            }
+
+            if sections.isEmpty {
+                ContentUnavailableView.search(text: search)
+            }
+        }
+        .listStyle(.plain)
+        .navigationTitle("Your Trip")
+        .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
+        .searchable(text: $search, prompt: "Search")
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Menu {
+                    Toggle(isOn: $hideCompleted) {
+                        Label("Hide Completed", systemImage: "checkmark.circle")
+                    }
+                } label: {
+                    Label("Filter", systemImage: hideCompleted
+                          ? "line.3.horizontal.decrease.circle.fill"
+                          : "line.3.horizontal.decrease")
+                }
+            }
+            ToolbarSpacer(.flexible, placement: .bottomBar)
+            DefaultToolbarItem(kind: .search, placement: .bottomBar)
+        }
+        .task { Seeding.seedIfNeeded(context) }
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
     }
 
     @ViewBuilder
@@ -96,20 +101,29 @@ struct TripListView: View {
 
     // MARK: - Filtering
 
+    /// Days with their filtered segments, empty days dropped — computed once.
+    private var visibleSections: [DaySection] {
+        let query = self.query
+        return days.compactMap { day in
+            let segments = day.orderedSegments.filter { matches($0, query: query) }
+            return segments.isEmpty ? nil : DaySection(day: day, segments: segments)
+        }
+    }
+
+    private func matches(_ segment: TripSegment, query: String) -> Bool {
+        if hideCompleted && segment.isCompleted { return false }
+        if !query.isEmpty && !segment.matchText.contains(query) { return false }
+        return true
+    }
+
     private var query: String {
         search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 
-    private func visibleSegments(in day: TripDay) -> [TripSegment] {
-        day.orderedSegments.filter { segment in
-            if hideCompleted && segment.isCompleted { return false }
-            if !query.isEmpty && !segment.matchText.contains(query) { return false }
-            return true
-        }
-    }
-
-    private var isEmpty: Bool {
-        days.allSatisfy { visibleSegments(in: $0).isEmpty }
+    private struct DaySection: Identifiable {
+        let day: TripDay
+        let segments: [TripSegment]
+        var id: String { day.date }
     }
 }
 

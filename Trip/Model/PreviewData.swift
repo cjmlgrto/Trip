@@ -8,7 +8,7 @@ import SwiftData
 enum PreviewData {
     static let container: ModelContainer = {
         let container = try! ModelContainer(
-            for: TripInfo.self, TripDay.self, TripSegment.self,
+            for: TripDay.self, TripSegment.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         Seeding.seedIfNeeded(container.mainContext)

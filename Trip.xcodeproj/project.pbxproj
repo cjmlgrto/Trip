@@ -6,14 +6,63 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0725EE252FF1B19100BBE75E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0725EE242FF1B19100BBE75E /* WidgetKit.framework */; };
+		0725EE272FF1B19100BBE75E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0725EE262FF1B19100BBE75E /* SwiftUI.framework */; };
+		0725EE342FF1B19200BBE75E /* TripWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0725EE222FF1B19100BBE75E /* TripWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0725EE322FF1B19200BBE75E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0725EE212FF1B19100BBE75E;
+			remoteInfo = TripWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0725EE392FF1B19200BBE75E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				0725EE342FF1B19200BBE75E /* TripWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* Trip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0725EE222FF1B19100BBE75E /* TripWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TripWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0725EE242FF1B19100BBE75E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		0725EE262FF1B19100BBE75E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0725EE352FF1B19200BBE75E /* Exceptions for "TripWidget" folder in "TripWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0725EE212FF1B19100BBE75E /* TripWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		000000000000000000000010 /* Trip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Trip;
+			sourceTree = "<group>";
+		};
+		0725EE282FF1B19100BBE75E /* TripWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0725EE352FF1B19200BBE75E /* Exceptions for "TripWidget" folder in "TripWidgetExtension" target */,
+			);
+			path = TripWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -24,6 +73,13 @@
 			files = (
 			);
 		};
+		0725EE1F2FF1B19100BBE75E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				0725EE272FF1B19100BBE75E /* SwiftUI.framework in Frameworks */,
+				0725EE252FF1B19100BBE75E /* WidgetKit.framework in Frameworks */,
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -31,6 +87,8 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000010 /* Trip */,
+				0725EE282FF1B19100BBE75E /* TripWidget */,
+				0725EE232FF1B19100BBE75E /* Frameworks */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,8 +97,18 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000120 /* Trip.app */,
+				0725EE222FF1B19100BBE75E /* TripWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0725EE232FF1B19100BBE75E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0725EE242FF1B19100BBE75E /* WidgetKit.framework */,
+				0725EE262FF1B19100BBE75E /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -53,8 +121,12 @@
 				000000000000000120000000 /* Sources */,
 				000000000000000130000000 /* Frameworks */,
 				000000000000000140000000 /* Resources */,
+				0725EE392FF1B19200BBE75E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				0725EE332FF1B19200BBE75E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				000000000000000000000010 /* Trip */,
@@ -64,6 +136,24 @@
 			productReference = 000000000000000000000120 /* Trip.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0725EE212FF1B19100BBE75E /* TripWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0725EE362FF1B19200BBE75E /* Build configuration list for PBXNativeTarget "TripWidgetExtension" */;
+			buildPhases = (
+				0725EE1E2FF1B19100BBE75E /* Sources */,
+				0725EE1F2FF1B19100BBE75E /* Frameworks */,
+				0725EE202FF1B19100BBE75E /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				0725EE282FF1B19100BBE75E /* TripWidget */,
+			);
+			name = TripWidgetExtension;
+			productName = TripWidgetExtension;
+			productReference = 0725EE222FF1B19100BBE75E /* TripWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -71,11 +161,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 26.3;
+					};
+					0725EE212FF1B19100BBE75E = {
+						CreatedOnToolsVersion = 27.0;
 					};
 				};
 			};
@@ -94,12 +187,18 @@
 			projectRoot = "";
 			targets = (
 				000000000000000100000000 /* Trip */,
+				0725EE212FF1B19100BBE75E /* TripWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		000000000000000140000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		0725EE202FF1B19100BBE75E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -112,7 +211,20 @@
 			files = (
 			);
 		};
+		0725EE1E2FF1B19100BBE75E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0725EE332FF1B19200BBE75E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0725EE212FF1B19100BBE75E /* TripWidgetExtension */;
+			targetProxy = 0725EE322FF1B19200BBE75E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		000000000000000011000000 /* Debug configuration for PBXProject "Trip" */ = {
@@ -323,6 +435,69 @@
 			};
 			name = Release;
 		};
+		0725EE372FF1B19200BBE75E /* Debug configuration for PBXNativeTarget "TripWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G84G6PSZP2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = devplaceholder.OXQBKSXA.Trip.TripWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0725EE382FF1B19200BBE75E /* Release configuration for PBXNativeTarget "TripWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = G84G6PSZP2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TripWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = devplaceholder.OXQBKSXA.Trip.TripWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -339,6 +514,14 @@
 			buildConfigurations = (
 				000000000000000111000000 /* Debug configuration for PBXNativeTarget "Trip" */,
 				000000000000000112000000 /* Release configuration for PBXNativeTarget "Trip" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		0725EE362FF1B19200BBE75E /* Build configuration list for PBXNativeTarget "TripWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0725EE372FF1B19200BBE75E /* Debug configuration for PBXNativeTarget "TripWidgetExtension" */,
+				0725EE382FF1B19200BBE75E /* Release configuration for PBXNativeTarget "TripWidgetExtension" */,
 			);
 			defaultConfigurationName = Release;
 		};

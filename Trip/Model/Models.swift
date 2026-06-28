@@ -100,7 +100,7 @@ struct Attachment: Codable, Hashable {
 
 // MARK: - Segment kind
 
-enum SegmentKind: String {
+enum SegmentKind: String, CaseIterable {
     case flight, train, hotel, activity, meal, wedding
 
     var symbol: String {

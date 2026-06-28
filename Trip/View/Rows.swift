@@ -6,6 +6,36 @@ import SwiftUI
 // Upcoming) drives color only — all type comes from system text styles and all
 // color from semantic styles, so everything tracks Dynamic Type and dark mode.
 
+// MARK: - Category styling
+//
+// Upcoming items are color-coded by category using system colors from the blue
+// family, so the single red "current" indicator always stands out.
+
+extension SegmentKind {
+    var indicatorColor: Color {
+        switch self {
+        case .flight:   Color(.systemBlue)
+        case .train:    Color(.systemCyan)
+        case .hotel:    Color(.systemIndigo)
+        case .activity: Color(.systemTeal)
+        case .meal:     Color(.systemMint)
+        case .wedding:  Color(.systemPurple)
+        }
+    }
+
+    /// Plural label for the filter menu.
+    var label: String {
+        switch self {
+        case .flight:   "Flights"
+        case .train:    "Trains"
+        case .hotel:    "Hotels"
+        case .activity: "Activities"
+        case .meal:     "Meals"
+        case .wedding:  "Wedding"
+        }
+    }
+}
+
 /// Visual state of an itinerary item, mirroring the design's layer-group names.
 enum ItemState {
     case complete, current, upcoming
@@ -16,13 +46,6 @@ enum ItemState {
         else { self = .upcoming }
     }
 
-    var indicator: AnyShapeStyle {
-        switch self {
-        case .complete: AnyShapeStyle(.quaternary)
-        case .current:  AnyShapeStyle(.red)
-        case .upcoming: AnyShapeStyle(Color(.systemGray))
-        }
-    }
     var title: AnyShapeStyle {
         switch self {
         case .complete: AnyShapeStyle(.quaternary)
@@ -72,10 +95,19 @@ struct SegmentRow: View {
         ItemState(isCompleted: segment.isCompleted, isCurrent: isCurrent)
     }
 
+    /// Complete dims, current is red; otherwise the category color.
+    private var indicatorStyle: AnyShapeStyle {
+        switch state {
+        case .complete: AnyShapeStyle(.quaternary)
+        case .current:  AnyShapeStyle(.red)
+        case .upcoming: AnyShapeStyle(segment.kind.indicatorColor)
+        }
+    }
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Capsule()
-                .fill(state.indicator)
+                .fill(indicatorStyle)
                 .frame(width: 4)
 
             VStack(alignment: .leading, spacing: 4) {

@@ -135,6 +135,11 @@ enum DateText {
         return ymdhm.date(from: "\(day) \(time)")
     }
 
+    /// "yyyy-MM-dd" key for a date, to compare against a day's `date`.
+    static func dayKey(_ date: Date) -> String {
+        ymd.string(from: date)
+    }
+
     private static let ymd: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy-MM-dd"; return f

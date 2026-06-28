@@ -110,17 +110,6 @@ struct Attachment: Codable, Hashable {
 
 enum SegmentKind: String, CaseIterable {
     case flight, train, hotel, activity, meal, wedding
-
-    var symbol: String {
-        switch self {
-        case .flight:   "airplane"
-        case .train:    "tram.fill"
-        case .hotel:    "bed.double.fill"
-        case .activity: "building.columns"
-        case .meal:     "fork.knife"
-        case .wedding:  "heart.fill"
-        }
-    }
 }
 
 // MARK: - Date formatting helpers

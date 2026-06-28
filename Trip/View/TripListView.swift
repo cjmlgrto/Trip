@@ -16,6 +16,7 @@ struct TripListView: View {
     @State private var search = ""
     @State private var hideCompleted = false
     @State private var todayOnly = false
+    @State private var hiddenKinds: Set<SegmentKind> = []
     @State private var now = Date()
 
     var body: some View {
@@ -63,6 +64,13 @@ struct TripListView: View {
                     }
                     Toggle(isOn: $todayOnly) {
                         Label("Today Only", systemImage: "calendar")
+                    }
+                    Section("Categories") {
+                        ForEach(SegmentKind.allCases, id: \.self) { kind in
+                            Toggle(isOn: visibility(of: kind)) {
+                                Label(kind.label, systemImage: kind.symbol)
+                            }
+                        }
                     }
                 } label: {
                     Label("Filter", systemImage: isFiltering
@@ -116,10 +124,21 @@ struct TripListView: View {
         }
     }
 
-    private var isFiltering: Bool { hideCompleted || todayOnly }
+    private var isFiltering: Bool { hideCompleted || todayOnly || !hiddenKinds.isEmpty }
+
+    /// Binding for a category's visibility toggle (on == shown).
+    private func visibility(of kind: SegmentKind) -> Binding<Bool> {
+        Binding(
+            get: { !hiddenKinds.contains(kind) },
+            set: { shown in
+                if shown { hiddenKinds.remove(kind) } else { hiddenKinds.insert(kind) }
+            }
+        )
+    }
 
     private func matches(_ segment: TripSegment, query: String) -> Bool {
         if hideCompleted && segment.isCompleted { return false }
+        if hiddenKinds.contains(segment.kind) { return false }
         if !query.isEmpty && !segment.matchText.contains(query) { return false }
         return true
     }

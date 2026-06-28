@@ -90,7 +90,7 @@ struct TripListView: View {
                         Label("Today Only", systemImage: "calendar")
                     }
                     Section("Categories") {
-                        ForEach(SegmentKind.allCases, id: \.self) { kind in
+                        ForEach(SegmentKind.spectrumOrder, id: \.self) { kind in
                             Toggle(isOn: visibility(of: kind)) {
                                 Label {
                                     Text(kind.label)

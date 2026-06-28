@@ -13,6 +13,7 @@ import MapKit
 struct SegmentDetailView: View {
     @Bindable var segment: TripSegment
     @Environment(\.openURL) private var openURL
+    @State private var titleOnScreen = true
 
     /// Extra horizontal inset applied to text, beyond the outer 16pt margin.
     private let textInset: CGFloat = 16
@@ -28,7 +29,9 @@ struct SegmentDetailView: View {
             }
             .padding(16)
         }
-        .navigationTitle(segment.title)
+        // Avoid duplicating the in-content title: the nav bar shows it only
+        // once the large title has scrolled out of view.
+        .navigationTitle(titleOnScreen ? "" : segment.title)
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -44,6 +47,7 @@ struct SegmentDetailView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(segment.title)
                     .font(.largeTitle.bold())
+                    .onScrollVisibilityChange { titleOnScreen = $0 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(segment.summary).font(.body)
                     Text(segment.timeRange).font(.body).foregroundStyle(.secondary)
@@ -138,7 +142,7 @@ struct SegmentDetailView: View {
     private func detailRow(_ row: DetailRowModel) -> some View {
         switch row {
         case let .fact(label, value):
-            HStack(spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(label).font(.body)
                 Spacer(minLength: 8)
                 Text(value).font(.body).multilineTextAlignment(.trailing)
@@ -158,7 +162,7 @@ struct SegmentDetailView: View {
     }
 
     private func documentRow(_ label: String, pending: Bool) -> some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text("Document").font(.body)
             Spacer(minLength: 8)
             Label(pending ? "\(label) (pending)" : label, systemImage: "paperclip")
@@ -177,7 +181,7 @@ struct SegmentDetailView: View {
                 Button {
                     openInMaps(coordinate)
                 } label: {
-                    Text("Open in Maps").frame(maxWidth: .infinity)
+                    Text("Open in Maps").fontWeight(.medium).frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glassProminent)
             }
@@ -187,7 +191,7 @@ struct SegmentDetailView: View {
                 Button {
                     openURL(url)
                 } label: {
-                    Text("Manage booking").frame(maxWidth: .infinity)
+                    Text("Manage booking").fontWeight(.medium).frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glass)
             }

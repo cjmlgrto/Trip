@@ -22,8 +22,8 @@ enum Seeding {
             for (segIndex, seg) in day.segments.enumerated() {
                 let segment = TripSegment(
                     id: seg.id, order: segIndex, kindRaw: seg.type, time: seg.time,
-                    title: seg.title, summary: seg.summary, info: seg.info, detail: seg.detail,
-                    ref: seg.ref, seat: seg.seat,
+                    endTime: seg.endTime, title: seg.title, summary: seg.summary,
+                    info: seg.info, detail: seg.detail, ref: seg.ref, seat: seg.seat,
                     attachments: (seg.files ?? []).map { Attachment(name: $0.name, label: $0.label) },
                     link: seg.link,
                     pinName: seg.pin?.name, pinAddress: seg.pin?.address,
@@ -58,7 +58,7 @@ private struct TripFile: Decodable {
     }
     struct SegmentDTO: Decodable {
         let id, type, time, title, summary, detail: String
-        let info, ref, seat, link: String?
+        let endTime, info, ref, seat, link: String?
         let files: [FileDTO]?
         let pin: PinDTO?
     }

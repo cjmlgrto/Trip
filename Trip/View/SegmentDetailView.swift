@@ -35,7 +35,10 @@ struct SegmentDetailView: View {
             }
 
             Section("Details") {
-                LabeledContent("Time", value: segment.displayTime)
+                LabeledContent("Time", value: segment.timeRange)
+                if let info = segment.info, !info.isEmpty {
+                    LabeledContent("Good to know", value: info)
+                }
                 if let ref = segment.ref, !ref.isEmpty {
                     LabeledContent("Reference", value: ref)
                 }

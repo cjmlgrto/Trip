@@ -22,11 +22,11 @@ struct WidgetEvent: Identifiable {
     }
 }
 
-/// One line shown in the widget: an event plus its role label.
+/// One event shown in the widget, with its role.
 struct WidgetItem: Identifiable {
-    let label: String          // "Now" / "Next" / "Then"
     let event: WidgetEvent
     let inProgress: Bool
+    let progress: Double?      // 0...1 along the rail, when in progress with a known end
     var id: String { event.id }
 }
 
@@ -34,20 +34,22 @@ enum WidgetTripData {
     /// All events, sorted by start time. Loaded once.
     static let events: [WidgetEvent] = load()
 
-    /// The current (in-progress) event and the upcoming ones, capped at two
-    /// lines total.
+    /// The in-progress event (if any) followed by the upcoming events, in order.
+    /// The view shows as many as its family allows.
     static func lineup(at now: Date) -> [WidgetItem] {
         var items: [WidgetItem] = []
         if let current = events.first(where: { event in
             event.start <= now && now < (event.end ?? event.start.addingTimeInterval(3600))
         }) {
-            items.append(WidgetItem(label: "Now", event: current, inProgress: true))
+            var progress: Double?
+            if let end = current.end, end > current.start {
+                progress = min(max(now.timeIntervalSince(current.start)
+                                   / end.timeIntervalSince(current.start), 0), 1)
+            }
+            items.append(WidgetItem(event: current, inProgress: true, progress: progress))
         }
-        let upcoming = events.filter { $0.start > now }
-        let labels = ["Next", "Then"]
-        for (index, event) in upcoming.prefix(2 - items.count).enumerated() {
-            items.append(WidgetItem(label: labels[min(index, labels.count - 1)],
-                                    event: event, inProgress: false))
+        for event in events where event.start > now {
+            items.append(WidgetItem(event: event, inProgress: false, progress: nil))
         }
         return items
     }
@@ -99,6 +101,9 @@ enum WidgetTripData {
 enum WidgetDate {
     static func clock(_ date: Date) -> String { clockFormatter.string(from: date) }
 
+    /// "Sunday, Jun 28" — the widget's day header.
+    static func longDate(_ date: Date) -> String { longFormatter.string(from: date) }
+
     static func dateTime(day: String, time: String) -> Date? {
         ymdhm.date(from: "\(day) \(time)")
     }
@@ -110,5 +115,8 @@ enum WidgetDate {
     private static let clockFormatter: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
         f.dateFormat = "h:mm a"; return f
+    }()
+    private static let longFormatter: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "EEEE, MMM d"; return f
     }()
 }

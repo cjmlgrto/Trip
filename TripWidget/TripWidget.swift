@@ -26,6 +26,44 @@ struct TripEntry: TimelineEntry {
     let items: [WidgetItem]
 }
 
+// MARK: - Per-family layout (system text styles, scaled to the widget size)
+
+private struct RowStyle {
+    let title: Font
+    let location: Font
+    let time: Font
+    let showsLocation: Bool
+}
+
+private struct WidgetLayout {
+    let header: Font
+    let row: RowStyle
+    let maxEvents: Int
+    let rowSpacing: CGFloat
+
+    static func forFamily(_ family: WidgetFamily) -> WidgetLayout {
+        switch family {
+        case .systemLarge:
+            return WidgetLayout(
+                header: .title2.bold(),
+                row: RowStyle(title: .headline, location: .body, time: .footnote, showsLocation: true),
+                maxEvents: 4, rowSpacing: 16)
+        case .systemMedium:
+            return WidgetLayout(
+                header: .headline,
+                row: RowStyle(title: .subheadline.weight(.semibold), location: .footnote,
+                              time: .caption2, showsLocation: true),
+                maxEvents: 2, rowSpacing: 10)
+        default: // systemSmall
+            return WidgetLayout(
+                header: .subheadline.weight(.semibold),
+                row: RowStyle(title: .subheadline.weight(.semibold), location: .footnote,
+                              time: .caption2, showsLocation: true),
+                maxEvents: 1, rowSpacing: 8)
+        }
+    }
+}
+
 // MARK: - Category styling (mirrors the app's blue-family rails)
 
 private func railColor(for item: WidgetItem) -> Color {
@@ -41,40 +79,53 @@ private func railColor(for item: WidgetItem) -> Color {
     }
 }
 
-// MARK: - Views
+// MARK: - Row
 
-struct EventRow: View {
+private struct WidgetEventRow: View {
     let item: WidgetItem
-    var showsTime = true
+    let style: RowStyle
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: 12) {
             Capsule()
                 .fill(railColor(for: item))
                 .frame(width: 4)
+                .overlay { progressDot }
 
-            VStack(alignment: .leading, spacing: 1) {
-                Text(item.label.uppercased())
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(item.inProgress ? AnyShapeStyle(.red) : AnyShapeStyle(.secondary))
+            VStack(alignment: .leading, spacing: 2) {
                 Text(item.event.title)
-                    .font(.headline)
+                    .font(style.title)
+                    .foregroundStyle(item.inProgress ? AnyShapeStyle(.red) : AnyShapeStyle(.primary))
                     .lineLimit(1)
-                Text(item.event.location)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                if showsTime {
-                    Text(item.event.timeRange)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                if style.showsLocation {
+                    Text(item.event.location)
+                        .font(style.location)
                         .lineLimit(1)
                 }
+                Text(item.event.timeRange)
+                    .font(style.time)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
             Spacer(minLength: 0)
         }
     }
+
+    @ViewBuilder
+    private var progressDot: some View {
+        if let progress = item.progress {
+            GeometryReader { geo in
+                ZStack {
+                    Circle().fill(Color(.systemBackground)).frame(width: 12, height: 12)
+                    Circle().fill(.red).frame(width: 8, height: 8)
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height * progress)
+            }
+        }
+    }
 }
+
+// MARK: - Entry view
 
 struct TripWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family
@@ -83,14 +134,16 @@ struct TripWidgetEntryView: View {
     var body: some View {
         if entry.items.isEmpty {
             emptyState
-        } else if family == .systemSmall {
-            EventRow(item: entry.items[0])
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         } else {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(entry.items) { EventRow(item: $0) }
+            let layout = WidgetLayout.forFamily(family)
+            let shown = Array(entry.items.prefix(layout.maxEvents))
+            VStack(alignment: .leading, spacing: layout.rowSpacing) {
+                Text(WidgetDate.longDate(shown.first?.event.start ?? entry.date))
+                    .font(layout.header)
+                ForEach(shown) { WidgetEventRow(item: $0, style: layout.row) }
                 Spacer(minLength: 0)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }
 
@@ -115,7 +168,7 @@ struct TripWidget: Widget {
         }
         .configurationDisplayName("Your Trip")
         .description("Your current and next event.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 

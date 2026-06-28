@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Rows
 //
@@ -33,6 +34,29 @@ extension SegmentKind {
         case .meal:     "Meals"
         case .wedding:  "Wedding"
         }
+    }
+
+    var indicatorUIColor: UIColor {
+        switch self {
+        case .flight:   .systemBlue
+        case .train:    .systemCyan
+        case .hotel:    .systemIndigo
+        case .activity: .systemTeal
+        case .meal:     .systemMint
+        case .wedding:  .systemPurple
+        }
+    }
+
+    /// A filled circle in the category color, for use as a menu icon. Rendered
+    /// as an original-mode image so the menu keeps the color instead of
+    /// templating it to the tint.
+    var swatchImage: UIImage {
+        let diameter: CGFloat = 12
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: diameter, height: diameter))
+        return renderer.image { context in
+            indicatorUIColor.setFill()
+            context.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: diameter, height: diameter))
+        }.withRenderingMode(.alwaysOriginal)
     }
 }
 

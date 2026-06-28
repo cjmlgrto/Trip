@@ -92,7 +92,11 @@ struct TripListView: View {
                     Section("Categories") {
                         ForEach(SegmentKind.allCases, id: \.self) { kind in
                             Toggle(isOn: visibility(of: kind)) {
-                                Label(kind.label, systemImage: kind.symbol)
+                                Label {
+                                    Text(kind.label)
+                                } icon: {
+                                    Image(uiImage: kind.swatchImage)
+                                }
                             }
                         }
                     }

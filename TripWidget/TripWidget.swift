@@ -50,14 +50,14 @@ private struct WidgetLayout {
                 maxEvents: 4, rowSpacing: 16)
         case .systemMedium:
             return WidgetLayout(
-                header: .headline,
-                row: RowStyle(title: .subheadline.weight(.semibold), location: .footnote,
+                header: .subheadline.weight(.semibold),
+                row: RowStyle(title: .caption.weight(.semibold), location: .caption,
                               time: .caption2, showsLocation: true),
                 maxEvents: 2, rowSpacing: 10)
         default: // systemSmall
             return WidgetLayout(
-                header: .subheadline.weight(.semibold),
-                row: RowStyle(title: .subheadline.weight(.semibold), location: .footnote,
+                header: .footnote.weight(.semibold),
+                row: RowStyle(title: .caption.weight(.semibold), location: .caption,
                               time: .caption2, showsLocation: true),
                 maxEvents: 1, rowSpacing: 8)
         }
@@ -139,7 +139,7 @@ struct TripWidgetEntryView: View {
             let shown = Array(entry.items.prefix(layout.maxEvents))
             VStack(alignment: .leading, spacing: layout.rowSpacing) {
                 Text(WidgetDate.longDate(shown.first?.event.start ?? entry.date))
-                    .font(layout.header)
+                    .font(.headline)
                 ForEach(shown) { WidgetEventRow(item: $0, style: layout.row) }
                 Spacer(minLength: 0)
             }
@@ -172,7 +172,19 @@ struct TripWidget: Widget {
     }
 }
 
-#Preview(as: .systemMedium) {
+#Preview("Small", as: .systemSmall) {
+    TripWidget()
+} timeline: {
+    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+}
+
+#Preview("Medium", as: .systemMedium) {
+    TripWidget()
+} timeline: {
+    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+}
+
+#Preview("Large", as: .systemLarge) {
     TripWidget()
 } timeline: {
     TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))

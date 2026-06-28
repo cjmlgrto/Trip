@@ -56,9 +56,6 @@ enum ItemState {
     var subtitle: AnyShapeStyle {
         self == .complete ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.primary)
     }
-    var info: AnyShapeStyle {
-        self == .complete ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.secondary)
-    }
     var time: AnyShapeStyle {
         switch self {
         case .complete: AnyShapeStyle(.quaternary)
@@ -117,18 +114,12 @@ struct SegmentRow: View {
                 Text(segment.summary)
                     .font(.body)
                     .foregroundStyle(state.subtitle)
-                if let info = segment.info, !info.isEmpty {
-                    Text(info)
-                        .font(.footnote)
-                        .foregroundStyle(state.info)
-                }
+                Text(segment.timeRange)
+                    .font(.footnote)
+                    .foregroundStyle(state.time)
             }
 
-            Spacer(minLength: 8)
-
-            Text(segment.displayTime)
-                .font(.footnote)
-                .foregroundStyle(state.time)
+            Spacer(minLength: 0)
         }
     }
 }

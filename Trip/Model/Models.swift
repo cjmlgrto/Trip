@@ -35,6 +35,7 @@ final class TripSegment {
     var order: Int
     var kindRaw: String
     var time: String
+    var endTime: String?
     var title: String
     var summary: String
     var info: String?
@@ -51,7 +52,7 @@ final class TripSegment {
 
     var day: TripDay?
 
-    init(id: String, order: Int, kindRaw: String, time: String, title: String,
+    init(id: String, order: Int, kindRaw: String, time: String, endTime: String?, title: String,
          summary: String, info: String?, detail: String, ref: String?, seat: String?,
          attachments: [Attachment], link: String?, pinName: String?, pinAddress: String?,
          latitude: Double?, longitude: Double?) {
@@ -59,6 +60,7 @@ final class TripSegment {
         self.order = order
         self.kindRaw = kindRaw
         self.time = time
+        self.endTime = endTime
         self.title = title
         self.summary = summary
         self.info = info
@@ -76,6 +78,12 @@ final class TripSegment {
 
     var kind: SegmentKind { SegmentKind(rawValue: kindRaw) ?? .activity }
     var displayTime: String { DateText.clockTime(time) }
+
+    /// "5:55 PM to 6:15 PM", or just the start when there's no end time.
+    var timeRange: String {
+        guard let endTime, !endTime.isEmpty else { return displayTime }
+        return "\(displayTime) to \(DateText.clockTime(endTime))"
+    }
 
     var coordinate: CLLocationCoordinate2D? {
         guard let latitude, let longitude else { return nil }

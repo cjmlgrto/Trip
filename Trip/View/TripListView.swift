@@ -18,6 +18,7 @@ struct TripListView: View {
     @State private var todayOnly = false
     @State private var hiddenKinds: Set<SegmentKind> = []
     @State private var detailLevel: DetailLevel = .full
+    @State private var pinchBaseLevel: DetailLevel?
     @State private var now = Date()
 
     var body: some View {
@@ -55,17 +56,23 @@ struct TripListView: View {
             }
         }
         .listStyle(.plain)
-        .gesture(
-            MagnifyGesture(minimumScaleDelta: 0.1)
-                .onEnded { value in
-                    withAnimation(.snappy) {
-                        if value.magnification < 1 {
-                            detailLevel = detailLevel.collapsed
-                        } else if value.magnification > 1 {
-                            detailLevel = detailLevel.expanded
-                        }
+        .simultaneousGesture(
+            MagnifyGesture()
+                .onChanged { value in
+                    // Track the level live as the pinch progresses: zooming out
+                    // (magnification < 1) drops tertiary then secondary; zooming
+                    // back in restores them. ~0.3 of pinch per detail level.
+                    let base = pinchBaseLevel ?? detailLevel
+                    if pinchBaseLevel == nil { pinchBaseLevel = base }
+                    let steps = Int(((value.magnification - 1) / 0.3).rounded())
+                    let target = min(max(base.rawValue + steps,
+                                         DetailLevel.minimal.rawValue),
+                                     DetailLevel.full.rawValue)
+                    if let level = DetailLevel(rawValue: target), level != detailLevel {
+                        withAnimation(.snappy) { detailLevel = level }
                     }
                 }
+                .onEnded { _ in pinchBaseLevel = nil }
         )
         .navigationTitle("Your Trip")
         .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }

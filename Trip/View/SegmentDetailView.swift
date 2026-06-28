@@ -12,6 +12,7 @@ import MapKit
 
 struct SegmentDetailView: View {
     @Bindable var segment: TripSegment
+    @Environment(\.openURL) private var openURL
 
     /// Extra horizontal inset applied to text, beyond the outer 16pt margin.
     private let textInset: CGFloat = 16
@@ -171,30 +172,35 @@ struct SegmentDetailView: View {
 
     private var actions: some View {
         VStack(spacing: 16) {
+            // Primary: navigate (every event has a pin). Liquid Glass, prominent.
             if let coordinate = segment.coordinate {
                 Button {
                     openInMaps(coordinate)
                 } label: {
                     Text("Open in Maps").frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
             }
 
+            // Secondary (optional): manage the booking when there's a link.
+            if let link = segment.link, let url = URL(string: link) {
+                Button {
+                    openURL(url)
+                } label: {
+                    Text("Manage booking").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.glass)
+            }
+
+            // Tertiary (always): completion toggle, as a quiet text action.
             Button {
                 segment.isCompleted.toggle()
             } label: {
                 Text(segment.isCompleted ? "Mark as Not Done" : "Mark as Done")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.bordered)
-
-            if let link = segment.link, let url = URL(string: link) {
-                Link(destination: url) {
-                    Text("Manage booking").frame(maxWidth: .infinity)
-                }
-                .font(.body)
-                .padding(.top, 4)
-            }
+            .buttonStyle(.borderless)
+            .padding(.top, 4)
         }
         .controlSize(.large)
         .padding(.horizontal, textInset)

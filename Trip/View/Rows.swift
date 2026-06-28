@@ -36,6 +36,20 @@ extension SegmentKind {
     }
 }
 
+/// How much of each row to show. Pinching out collapses tertiary then
+/// secondary lines; pinching in restores them.
+enum DetailLevel: Int {
+    case minimal = 0   // title only
+    case medium = 1    // title + location
+    case full = 2      // title + location + time
+
+    var collapsed: DetailLevel { DetailLevel(rawValue: rawValue - 1) ?? .minimal }
+    var expanded: DetailLevel { DetailLevel(rawValue: rawValue + 1) ?? .full }
+
+    var showsSubtitle: Bool { rawValue >= DetailLevel.medium.rawValue }
+    var showsTime: Bool { rawValue >= DetailLevel.full.rawValue }
+}
+
 /// Visual state of an itinerary item, mirroring the design's layer-group names.
 enum ItemState {
     case complete, current, upcoming
@@ -88,6 +102,7 @@ struct SegmentRow: View {
     let segment: TripSegment
     let isCurrent: Bool
     var now: Date = Date()
+    var detail: DetailLevel = .full
 
     private var state: ItemState {
         ItemState(isCompleted: segment.isCompleted, isCurrent: isCurrent)
@@ -125,12 +140,18 @@ struct SegmentRow: View {
                 Text(segment.title)
                     .font(.headline)
                     .foregroundStyle(state.title)
-                Text(segment.summary)
-                    .font(.body)
-                    .foregroundStyle(state.subtitle)
-                Text(segment.timeRange)
-                    .font(.footnote)
-                    .foregroundStyle(state.time)
+                if detail.showsSubtitle {
+                    Text(segment.summary)
+                        .font(.body)
+                        .foregroundStyle(state.subtitle)
+                        .transition(.opacity)
+                }
+                if detail.showsTime {
+                    Text(segment.timeRange)
+                        .font(.footnote)
+                        .foregroundStyle(state.time)
+                        .transition(.opacity)
+                }
             }
 
             Spacer(minLength: 0)
@@ -169,7 +190,11 @@ private struct CurrentRowPreview: View {
         segment.day = day
         let now = DateText.dateTime(day: "2026-06-29", time: "16:30") ?? Date()
         return List {
-            SegmentRow(segment: segment, isCurrent: true, now: now)
+            SegmentRow(segment: segment, isCurrent: true, now: now, detail: .full)
+                .listRowSeparator(.hidden)
+            SegmentRow(segment: segment, isCurrent: true, now: now, detail: .medium)
+                .listRowSeparator(.hidden)
+            SegmentRow(segment: segment, isCurrent: true, now: now, detail: .minimal)
                 .listRowSeparator(.hidden)
         }
         .listStyle(.plain)

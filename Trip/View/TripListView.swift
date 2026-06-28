@@ -17,6 +17,7 @@ struct TripListView: View {
     @State private var hideCompleted = false
     @State private var todayOnly = false
     @State private var hiddenKinds: Set<SegmentKind> = []
+    @State private var detailLevel: DetailLevel = .full
     @State private var now = Date()
 
     var body: some View {
@@ -38,7 +39,8 @@ struct TripListView: View {
 
                 ForEach(section.segments) { segment in
                     NavigationLink(value: segment) {
-                        SegmentRow(segment: segment, isCurrent: segment.id == currentID, now: now)
+                        SegmentRow(segment: segment, isCurrent: segment.id == currentID,
+                                   now: now, detail: detailLevel)
                     }
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
@@ -53,6 +55,18 @@ struct TripListView: View {
             }
         }
         .listStyle(.plain)
+        .gesture(
+            MagnifyGesture(minimumScaleDelta: 0.1)
+                .onEnded { value in
+                    withAnimation(.snappy) {
+                        if value.magnification < 1 {
+                            detailLevel = detailLevel.collapsed
+                        } else if value.magnification > 1 {
+                            detailLevel = detailLevel.expanded
+                        }
+                    }
+                }
+        )
         .navigationTitle("Your Trip")
         .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
         .searchable(text: $search, prompt: "Search")

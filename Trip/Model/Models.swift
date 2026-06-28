@@ -1,0 +1,159 @@
+import Foundation
+import SwiftData
+import CoreLocation
+
+// MARK: - Domain models (SwiftData)
+//
+// The trip is seeded once from the bundled JSON (see Seeding.swift), then these
+// models are the single source of truth. Completion is just a stored property
+// we mutate directly — no side tables, no dictionaries. Fully offline.
+
+@Model
+final class TripInfo {
+    var title: String
+    var subtitle: String
+    var traveler: String
+    var dateRange: String
+
+    init(title: String, subtitle: String, traveler: String, dateRange: String) {
+        self.title = title
+        self.subtitle = subtitle
+        self.traveler = traveler
+        self.dateRange = dateRange
+    }
+}
+
+@Model
+final class TripDay {
+    var order: Int
+    var date: String      // "2026-06-29"
+    var label: String
+    var city: String
+
+    @Relationship(deleteRule: .cascade, inverse: \TripSegment.day)
+    var segments: [TripSegment] = []
+
+    init(order: Int, date: String, label: String, city: String) {
+        self.order = order
+        self.date = date
+        self.label = label
+        self.city = city
+    }
+
+    /// Segments in their itinerary order.
+    var orderedSegments: [TripSegment] {
+        segments.sorted { $0.order < $1.order }
+    }
+
+    /// "Sun 28 Jun — Departure" style section header.
+    var header: String {
+        "\(DateText.weekdayDate(date)) — \(label)"
+    }
+}
+
+@Model
+final class TripSegment {
+    var id: String
+    var order: Int
+    var kindRaw: String
+    var time: String
+    var title: String
+    var summary: String
+    var detail: String
+    var ref: String?
+    var seat: String?
+    var file: String?
+    var link: String?
+    var pinName: String?
+    var pinAddress: String?
+    var latitude: Double?
+    var longitude: Double?
+    var reserved: Bool
+    var isCompleted: Bool
+
+    var day: TripDay?
+
+    init(id: String, order: Int, kindRaw: String, time: String, title: String,
+         summary: String, detail: String, ref: String?, seat: String?, file: String?,
+         link: String?, pinName: String?, pinAddress: String?, latitude: Double?,
+         longitude: Double?, reserved: Bool) {
+        self.id = id
+        self.order = order
+        self.kindRaw = kindRaw
+        self.time = time
+        self.title = title
+        self.summary = summary
+        self.detail = detail
+        self.ref = ref
+        self.seat = seat
+        self.file = file
+        self.link = link
+        self.pinName = pinName
+        self.pinAddress = pinAddress
+        self.latitude = latitude
+        self.longitude = longitude
+        self.reserved = reserved
+        self.isCompleted = false
+    }
+
+    var kind: SegmentKind { SegmentKind(rawValue: kindRaw) ?? .activity }
+    var displayTime: String { DateText.clockTime(time) }
+
+    var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+
+    /// Free-text haystack for `.searchable`.
+    var matchText: String {
+        [title, summary, detail, ref ?? "", seat ?? "", pinName ?? "", time]
+            .joined(separator: " ").lowercased()
+    }
+}
+
+// MARK: - Segment kind
+
+enum SegmentKind: String {
+    case flight, train, hotel, activity, meal, wedding
+
+    var symbol: String {
+        switch self {
+        case .flight:   "airplane"
+        case .train:    "tram.fill"
+        case .hotel:    "bed.double.fill"
+        case .activity: "building.columns"
+        case .meal:     "fork.knife"
+        case .wedding:  "heart.fill"
+        }
+    }
+}
+
+// MARK: - Date formatting helpers
+
+enum DateText {
+    static func clockTime(_ time: String) -> String {
+        guard !time.isEmpty, let date = hhmm.date(from: time) else { return time }
+        return clock.string(from: date)
+    }
+
+    static func weekdayDate(_ day: String) -> String {
+        guard let date = ymd.date(from: day) else { return day }
+        return weekday.string(from: date)
+    }
+
+    private static let ymd: DateFormatter = {
+        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd"; return f
+    }()
+    private static let hhmm: DateFormatter = {
+        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
+        f.dateFormat = "HH:mm"; return f
+    }()
+    private static let clock: DateFormatter = {
+        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
+        f.dateFormat = "h:mm a"; return f
+    }()
+    private static let weekday: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "EEE d MMM"; return f
+    }()
+}

@@ -15,6 +15,7 @@ struct TripListView: View {
 
     @State private var search = ""
     @State private var hideCompleted = false
+    @State private var todayOnly = false
     @State private var now = Date()
 
     var body: some View {
@@ -60,8 +61,11 @@ struct TripListView: View {
                     Toggle(isOn: $hideCompleted) {
                         Label("Hide Completed", systemImage: "checkmark.circle")
                     }
+                    Toggle(isOn: $todayOnly) {
+                        Label("Today Only", systemImage: "calendar")
+                    }
                 } label: {
-                    Label("Filter", systemImage: hideCompleted
+                    Label("Filter", systemImage: isFiltering
                           ? "line.3.horizontal.decrease.circle.fill"
                           : "line.3.horizontal.decrease")
                 }
@@ -104,11 +108,15 @@ struct TripListView: View {
     /// Days with their filtered segments, empty days dropped — computed once.
     private var visibleSections: [DaySection] {
         let query = self.query
+        let today = DateText.dayKey(now)
         return days.compactMap { day in
+            if todayOnly && day.date != today { return nil }
             let segments = day.orderedSegments.filter { matches($0, query: query) }
             return segments.isEmpty ? nil : DaySection(day: day, segments: segments)
         }
     }
+
+    private var isFiltering: Bool { hideCompleted || todayOnly }
 
     private func matches(_ segment: TripSegment, query: String) -> Bool {
         if hideCompleted && segment.isCompleted { return false }

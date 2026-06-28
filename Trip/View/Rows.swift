@@ -156,6 +156,7 @@ struct SegmentRow: View {
 
             Spacer(minLength: 0)
         }
+        .animation(.trip, value: segment.isCompleted)
     }
 
     /// A red dot with a system-background halo, slid down the bar by `progress`.
@@ -168,7 +169,7 @@ struct SegmentRow: View {
                     Circle().fill(.red).frame(width: 8, height: 8)
                 }
                 .position(x: geo.size.width / 2, y: geo.size.height * progress)
-                .animation(.easeInOut, value: progress)
+                .animation(.trip, value: progress)
             }
         }
     }

@@ -58,6 +58,10 @@ extension SegmentKind {
             context.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: diameter, height: diameter))
         }.withRenderingMode(.alwaysOriginal)
     }
+
+    /// Categories ordered along the color spectrum (mint → teal → cyan → blue
+    /// → indigo → purple), for the filter menu.
+    static let spectrumOrder: [SegmentKind] = [.meal, .activity, .train, .flight, .hotel, .wedding]
 }
 
 /// How much of each row to show. Pinching out collapses tertiary then

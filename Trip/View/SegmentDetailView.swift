@@ -42,10 +42,17 @@ struct SegmentDetailView: View {
                 if let seat = segment.seat, !seat.isEmpty {
                     LabeledContent("Seat", value: seat)
                 }
-                ticketRow
                 if let link = segment.link, let url = URL(string: link) {
                     Link(destination: url) {
                         Label("Manage booking", systemImage: "safari")
+                    }
+                }
+            }
+
+            if !segment.attachments.isEmpty {
+                Section("Documents") {
+                    ForEach(segment.attachments, id: \.name) { attachment in
+                        attachmentRow(attachment)
                     }
                 }
             }
@@ -58,16 +65,16 @@ struct SegmentDetailView: View {
     }
 
     @ViewBuilder
-    private var ticketRow: some View {
-        if let url = BundlePDF.url(for: segment.file) {
+    private func attachmentRow(_ attachment: Attachment) -> some View {
+        if let url = BundlePDF.url(for: attachment.name) {
             NavigationLink {
-                PDFScreen(url: url, title: segment.title)
+                PDFScreen(url: url, title: attachment.label)
             } label: {
-                Label("View ticket", systemImage: "doc.text")
+                Label(attachment.label, systemImage: "doc.text")
             }
-        } else if segment.file != nil {
+        } else {
             // Owner will add the PDF later — degrade gracefully, never crash.
-            Label("Confirmation pending", systemImage: "doc.text")
+            Label("\(attachment.label) (pending)", systemImage: "doc.text")
                 .foregroundStyle(.secondary)
         }
     }

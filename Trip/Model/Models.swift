@@ -41,7 +41,7 @@ final class TripSegment {
     var detail: String
     var ref: String?
     var seat: String?
-    var file: String?
+    var attachments: [Attachment]
     var link: String?
     var pinName: String?
     var pinAddress: String?
@@ -53,7 +53,7 @@ final class TripSegment {
 
     init(id: String, order: Int, kindRaw: String, time: String, title: String,
          summary: String, info: String?, detail: String, ref: String?, seat: String?,
-         file: String?, link: String?, pinName: String?, pinAddress: String?,
+         attachments: [Attachment], link: String?, pinName: String?, pinAddress: String?,
          latitude: Double?, longitude: Double?) {
         self.id = id
         self.order = order
@@ -65,7 +65,7 @@ final class TripSegment {
         self.detail = detail
         self.ref = ref
         self.seat = seat
-        self.file = file
+        self.attachments = attachments
         self.link = link
         self.pinName = pinName
         self.pinAddress = pinAddress
@@ -87,6 +87,15 @@ final class TripSegment {
         [title, summary, info ?? "", detail, ref ?? "", seat ?? "", pinName ?? "", time]
             .joined(separator: " ").lowercased()
     }
+}
+
+// MARK: - Attachment
+
+/// A bundled document linked to a segment (ticket, confirmation, travel doc).
+/// Stored inline on the segment as a Codable value type.
+struct Attachment: Codable, Hashable {
+    var name: String      // bundled file name, e.g. "eurostar-confirmation.pdf"
+    var label: String     // button title, e.g. "Eurostar ticket"
 }
 
 // MARK: - Segment kind

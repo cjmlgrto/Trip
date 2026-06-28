@@ -21,7 +21,10 @@
             "detail": "Virgin Atlantic VS20, a direct overnight flight to Heathrow that takes about 10 hours and 20 minutes in economy. You have one carry-on up to 10kg plus a personal item, and no checked bags.",
             "ref": "EAU2YY",
             "pin": { "name": "San Francisco International Airport", "lat": 37.6213, "lng": -122.3790, "address": "San Francisco, CA 94128, USA" },
-            "file": "flight-booking-details.pdf",
+            "files": [
+              { "name": "flight-booking-details.pdf", "label": "Flight booking" },
+              { "name": "flight-payment-receipt.pdf", "label": "Payment receipt" }
+            ],
             "link": "https://www.virginatlantic.com/manage-booking"
           }
         ]
@@ -40,6 +43,9 @@
             "info": "Take the Elizabeth line into town",
             "detail": "Clear passport control, then ride the Elizabeth line to Paddington, roughly 30 minutes and about 13 pounds. Your contactless card works directly, so you do not need an Oyster card.",
             "pin": { "name": "London Heathrow Airport", "lat": 51.4700, "lng": -0.4543, "address": "Longford TW6, UK" },
+            "files": [
+              { "name": "uk-eta.pdf", "label": "UK ETA" }
+            ],
             "link": "https://tfl.gov.uk/plan-a-journey/"
           },
           {
@@ -52,7 +58,9 @@
             "detail": "Four Points Flex by Sheraton on Upper Woburn Place. It is a windowless double pod, very dark and good for jet lagged sleep. No breakfast is included, and they take a 100 pound damage deposit on arrival that is refunded within a week. Check out is Wednesday by noon.",
             "ref": "6024.959.454",
             "pin": { "name": "Four Points Flex by Sheraton London Euston", "lat": 51.5264, "lng": -0.1294, "address": "8-11 Upper Woburn Place, London WC1H 0JV, UK" },
-            "file": "hotel-london-fourpoints.pdf",
+            "files": [
+              { "name": "hotel-london-fourpoints.pdf", "label": "Hotel booking" }
+            ],
             "link": "https://www.booking.com"
           },
           {
@@ -117,7 +125,9 @@
             "ref": "C64F2Q",
             "seat": "Coach 16, Seat 48",
             "pin": { "name": "London St Pancras International", "lat": 51.5320, "lng": -0.1263, "address": "Euston Rd, London N1C 4QP, UK" },
-            "file": "eurostar-confirmation.pdf",
+            "files": [
+              { "name": "eurostar-confirmation.pdf", "label": "Eurostar ticket" }
+            ],
             "link": "https://www.eurostar.com/uk-en/manage-booking"
           },
           {
@@ -130,7 +140,9 @@
             "detail": "Hotel d'Amiens on Rue des Deux Gares, an eight minute walk from Gare du Nord. It is a quiet twin room on the ground floor with air conditioning and good soundproofing. No breakfast, around 423 dollars including city tax, paid at the property. Check out is Friday by noon.",
             "ref": "5168.187.346",
             "pin": { "name": "Hotel d'Amiens", "lat": 48.8784, "lng": 2.3573, "address": "11 Rue des Deux Gares, 75010 Paris, France" },
-            "file": "hotel-paris-amiens.pdf",
+            "files": [
+              { "name": "hotel-paris-amiens.pdf", "label": "Hotel booking" }
+            ],
             "link": "https://www.booking.com"
           },
           {
@@ -220,7 +232,9 @@
             "ref": "C64F2Q",
             "seat": "Coach 13, Seat 24",
             "pin": { "name": "Paris Gare du Nord", "lat": 48.8809, "lng": 2.3553, "address": "18 Rue de Dunkerque, 75010 Paris, France" },
-            "file": "eurostar-confirmation.pdf",
+            "files": [
+              { "name": "eurostar-confirmation.pdf", "label": "Eurostar ticket" }
+            ],
             "link": "https://www.eurostar.com/uk-en/manage-booking"
           },
           {
@@ -244,7 +258,9 @@
             "ref": "OT982003",
             "seat": "Coach E, Seat 33",
             "pin": { "name": "Manchester Piccadilly", "lat": 53.4774, "lng": -2.2309, "address": "Manchester M60 7RA, UK" },
-            "file": "avanti-euston-manchester.pdf",
+            "files": [
+              { "name": "avanti-euston-manchester.pdf", "label": "Train ticket" }
+            ],
             "link": "https://www.avantiwestcoast.co.uk/"
           },
           {
@@ -323,7 +339,9 @@
             "detail": "A flexible off peak single, valid only on London Northwestern and connecting services, not Avanti. About two and a quarter hours via Milton Keynes. Aim to be at Euston by around 12:30pm. It cost 42 pounds 90.",
             "ref": "TTBMDHRYTQP",
             "pin": { "name": "Manchester Piccadilly", "lat": 53.4774, "lng": -2.2309, "address": "Manchester M60 7RA, UK" },
-            "file": "lnr-manchester-euston.pdf",
+            "files": [
+              { "name": "lnr-manchester-euston.pdf", "label": "Train ticket" }
+            ],
             "link": "https://www.nationalrail.co.uk/"
           },
           {
@@ -347,7 +365,10 @@
             "detail": "Virgin Atlantic VS41, just under 11 hours direct back to San Francisco in economy, arriving the same day at 9:25pm local time. Be at Terminal 3 about three hours before, so by 3:30pm.",
             "ref": "EAU2YY",
             "pin": { "name": "London Heathrow Terminal 3", "lat": 51.4710, "lng": -0.4590, "address": "Heathrow Airport, Hounslow TW6 1QG, UK" },
-            "file": "flight-booking-details.pdf",
+            "files": [
+              { "name": "flight-booking-details.pdf", "label": "Flight booking" },
+              { "name": "us-i94.pdf", "label": "US I-94" }
+            ],
             "link": "https://www.virginatlantic.com/manage-booking"
           }
         ]

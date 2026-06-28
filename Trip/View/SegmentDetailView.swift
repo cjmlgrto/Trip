@@ -2,55 +2,100 @@ import SwiftUI
 import SwiftData
 import MapKit
 
-// MARK: - Segment detail (matches the "Event Detail" Sketch design)
+// MARK: - Segment detail (matches the updated "Event Detail" Sketch design)
 //
-// A scrolling layout: the title is the collapsing large nav title; the content
-// opens with the location + time, then Notes, Location (address + offline map),
-// a Details table with alternating row fills (facts + tappable documents), and
-// a stack of Primary / Secondary / Tertiary actions.
+// Layout follows the spec's margin system: the content sits in a 16pt margin,
+// but *text* is inset a further 16pt (so ~32pt from the edge), while rich
+// content — the map and the Details table — uses only the 16pt margin and so
+// runs wider than the text. The title carries the same leading rail (and
+// progress dot) as the list's current item.
 
 struct SegmentDetailView: View {
     @Bindable var segment: TripSegment
 
+    /// Extra horizontal inset applied to text, beyond the outer 16pt margin.
+    private let textInset: CGFloat = 16
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 32) {
-                header
-                if !segment.detail.isEmpty {
-                    DetailSection("Notes") { Text(segment.detail).font(.body) }
-                }
-                if let coordinate = segment.coordinate {
-                    locationSection(coordinate)
-                }
-                if !detailRows.isEmpty {
-                    DetailSection("Details") { detailsTable }
-                }
+                titleBlock
+                if !segment.detail.isEmpty { notesSection }
+                if segment.coordinate != nil { locationSection }
+                if !detailRows.isEmpty { detailsSection }
                 actions
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 24)
+            .padding(16)
         }
         .navigationTitle(segment.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: Header
+    // MARK: Title block (with rail + progress dot)
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(segment.summary).font(.body)
-            Text(segment.timeRange).font(.body).foregroundStyle(.secondary)
+    private var titleBlock: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Capsule()
+                .fill(railStyle)
+                .frame(width: 4)
+                .overlay { progressDot }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(segment.title)
+                    .font(.largeTitle.bold())
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(segment.summary).font(.body)
+                    Text(segment.timeRange).font(.body).foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    private var railStyle: AnyShapeStyle {
+        if segment.isCompleted { return AnyShapeStyle(.quaternary) }
+        if isInProgress { return AnyShapeStyle(.red) }
+        return AnyShapeStyle(segment.kind.indicatorColor)
+    }
+
+    @ViewBuilder
+    private var progressDot: some View {
+        if let progress {
+            GeometryReader { geo in
+                ZStack {
+                    Circle().fill(Color(.systemBackground)).frame(width: 12, height: 12)
+                    Circle().fill(.red).frame(width: 8, height: 8)
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height * progress)
+            }
+        }
+    }
+
+    // MARK: Notes
+
+    private var notesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Notes").font(.headline)
+            Text(segment.detail).font(.body)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, textInset)
     }
 
-    // MARK: Location
+    // MARK: Location (text inset; map runs full width)
 
-    private func locationSection(_ coordinate: CLLocationCoordinate2D) -> some View {
-        DetailSection("Location") {
-            VStack(alignment: .leading, spacing: 8) {
+    private var locationSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Group {
+                Text("Location").font(.headline)
                 if let address = segment.pinAddress {
                     Text(address).font(.body)
                 }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, textInset)
+
+            if let coordinate = segment.coordinate {
                 Map(initialPosition: .region(MKCoordinateRegion(
                     center: coordinate,
                     span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
@@ -58,56 +103,67 @@ struct SegmentDetailView: View {
                     Marker(segment.pinName ?? segment.title, coordinate: coordinate)
                 }
                 .frame(height: 168)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                 .allowsHitTesting(false)
             }
         }
     }
 
-    // MARK: Details table (alternating row fills)
+    // MARK: Details table (full width, alternating fills, 16pt inset text)
 
-    private var detailsTable: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(detailRows.enumerated()), id: \.element.id) { index, row in
-                detailRow(row)
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 16)
-                    .background(index.isMultiple(of: 2) ? Color(.quaternarySystemFill) : .clear)
+    private var detailsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Details").font(.headline)
+                .padding(.horizontal, textInset)
+
+            VStack(spacing: 0) {
+                ForEach(Array(detailRows.enumerated()), id: \.element.id) { index, row in
+                    detailRow(row)
+                        .padding(.horizontal, textInset)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background {
+                            if index.isMultiple(of: 2) {
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .fill(Color(.quaternarySystemFill))
+                            }
+                        }
+                }
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
     @ViewBuilder
     private func detailRow(_ row: DetailRowModel) -> some View {
         switch row {
         case let .fact(label, value):
-            HStack {
-                Text(label)
+            HStack(spacing: 8) {
+                Text(label).font(.body)
                 Spacer(minLength: 8)
-                Text(value).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
+                Text(value).font(.body).multilineTextAlignment(.trailing)
             }
         case let .document(attachment):
             if let url = BundlePDF.url(for: attachment.name) {
                 NavigationLink {
                     PDFScreen(url: url, title: attachment.label)
                 } label: {
-                    documentLabel(attachment.label, pending: false)
+                    documentRow(attachment.label, pending: false)
                 }
                 .buttonStyle(.plain)
             } else {
-                documentLabel(attachment.label, pending: true)
+                documentRow(attachment.label, pending: true)
             }
         }
     }
 
-    private func documentLabel(_ label: String, pending: Bool) -> some View {
-        HStack {
-            Text("Document")
+    private func documentRow(_ label: String, pending: Bool) -> some View {
+        HStack(spacing: 8) {
+            Text("Document").font(.body)
             Spacer(minLength: 8)
             Label(pending ? "\(label) (pending)" : label, systemImage: "paperclip")
-                .labelStyle(.titleAndIcon)
+                .font(.body.weight(.medium))
                 .foregroundStyle(pending ? AnyShapeStyle(.secondary) : AnyShapeStyle(.tint))
+                .labelStyle(TrailingIconLabelStyle())
         }
     }
 
@@ -133,12 +189,36 @@ struct SegmentDetailView: View {
             .buttonStyle(.bordered)
 
             if let link = segment.link, let url = URL(string: link) {
-                Link("Manage booking", destination: url)
-                    .font(.body)
+                Link(destination: url) {
+                    Text("Manage booking").frame(maxWidth: .infinity)
+                }
+                .font(.body)
+                .padding(.top, 4)
             }
         }
         .controlSize(.large)
+        .padding(.horizontal, textInset)
         .padding(.top, 16)
+    }
+
+    // MARK: Now / progress for this event
+
+    private var now: Date { Date() }
+
+    private var isInProgress: Bool {
+        guard let start = DateText.dateTime(day: segment.day?.date ?? "", time: segment.time) else { return false }
+        let end = segment.endTime.flatMap { DateText.dateTime(day: segment.day?.date ?? "", time: $0) }
+            ?? start.addingTimeInterval(3600)
+        return start <= now && now < end
+    }
+
+    private var progress: Double? {
+        guard isInProgress,
+              let start = DateText.dateTime(day: segment.day?.date ?? "", time: segment.time),
+              let endText = segment.endTime,
+              let end = DateText.dateTime(day: segment.day?.date ?? "", time: endText),
+              end > start else { return nil }
+        return min(max(now.timeIntervalSince(start) / end.timeIntervalSince(start), 0), 1)
     }
 
     // MARK: Rows model
@@ -173,21 +253,12 @@ struct SegmentDetailView: View {
     }
 }
 
-// MARK: - Section (bold header + content), matching the design
-
-private struct DetailSection<Content: View>: View {
-    let title: String
-    @ViewBuilder var content: Content
-
-    init(_ title: String, @ViewBuilder content: () -> Content) {
-        self.title = title
-        self.content = content()
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.headline)
-            content.frame(maxWidth: .infinity, alignment: .leading)
+/// Puts the icon after the title (the link/attachment style in the design).
+private struct TrailingIconLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 4) {
+            configuration.title
+            configuration.icon
         }
     }
 }

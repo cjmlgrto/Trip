@@ -9,35 +9,18 @@ import CoreLocation
 // we mutate directly — no side tables, no dictionaries. Fully offline.
 
 @Model
-final class TripInfo {
-    var title: String
-    var subtitle: String
-    var traveler: String
-    var dateRange: String
-
-    init(title: String, subtitle: String, traveler: String, dateRange: String) {
-        self.title = title
-        self.subtitle = subtitle
-        self.traveler = traveler
-        self.dateRange = dateRange
-    }
-}
-
-@Model
 final class TripDay {
     var order: Int
     var date: String      // "2026-06-29"
     var label: String
-    var city: String
 
     @Relationship(deleteRule: .cascade, inverse: \TripSegment.day)
     var segments: [TripSegment] = []
 
-    init(order: Int, date: String, label: String, city: String) {
+    init(order: Int, date: String, label: String) {
         self.order = order
         self.date = date
         self.label = label
-        self.city = city
     }
 
     /// Segments in their itinerary order.
@@ -64,7 +47,6 @@ final class TripSegment {
     var pinAddress: String?
     var latitude: Double?
     var longitude: Double?
-    var reserved: Bool
     var isCompleted: Bool
 
     var day: TripDay?
@@ -72,7 +54,7 @@ final class TripSegment {
     init(id: String, order: Int, kindRaw: String, time: String, title: String,
          summary: String, info: String?, detail: String, ref: String?, seat: String?,
          file: String?, link: String?, pinName: String?, pinAddress: String?,
-         latitude: Double?, longitude: Double?, reserved: Bool) {
+         latitude: Double?, longitude: Double?) {
         self.id = id
         self.order = order
         self.kindRaw = kindRaw
@@ -89,7 +71,6 @@ final class TripSegment {
         self.pinAddress = pinAddress
         self.latitude = latitude
         self.longitude = longitude
-        self.reserved = reserved
         self.isCompleted = false
     }
 
@@ -133,11 +114,6 @@ enum DateText {
         return clock.string(from: date)
     }
 
-    static func weekdayDate(_ day: String) -> String {
-        guard let date = ymd.date(from: day) else { return day }
-        return weekday.string(from: date)
-    }
-
     /// "Sunday, Jun 28" — the day-header title.
     static func longDate(_ day: String) -> String {
         guard let date = ymd.date(from: day) else { return day }
@@ -165,9 +141,6 @@ enum DateText {
     private static let clock: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
         f.dateFormat = "h:mm a"; return f
-    }()
-    private static let weekday: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "EEE d MMM"; return f
     }()
     private static let longDay: DateFormatter = {
         let f = DateFormatter(); f.dateFormat = "EEEE, MMM d"; return f

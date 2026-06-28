@@ -38,7 +38,7 @@ struct TripListView: View {
 
                 ForEach(section.segments) { segment in
                     NavigationLink(value: segment) {
-                        SegmentRow(segment: segment, isCurrent: segment.id == currentID)
+                        SegmentRow(segment: segment, isCurrent: segment.id == currentID, now: now)
                     }
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))

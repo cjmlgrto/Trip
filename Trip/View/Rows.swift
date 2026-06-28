@@ -87,6 +87,7 @@ struct DayHeaderView: View {
 struct SegmentRow: View {
     let segment: TripSegment
     let isCurrent: Bool
+    var now: Date = Date()
 
     private var state: ItemState {
         ItemState(isCompleted: segment.isCompleted, isCurrent: isCurrent)
@@ -101,11 +102,24 @@ struct SegmentRow: View {
         }
     }
 
+    /// Fraction (0...1) through the current event by wall-clock time, if it has
+    /// a known end. Drives the position of the progress dot.
+    private var progress: Double? {
+        guard state == .current,
+              let start = DateText.dateTime(day: segment.day?.date ?? "", time: segment.time),
+              let endText = segment.endTime, !endText.isEmpty,
+              let end = DateText.dateTime(day: segment.day?.date ?? "", time: endText),
+              end > start else { return nil }
+        let fraction = now.timeIntervalSince(start) / end.timeIntervalSince(start)
+        return min(max(fraction, 0), 1)
+    }
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             Capsule()
                 .fill(indicatorStyle)
                 .frame(width: 4)
+                .overlay { progressDot }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(segment.title)
@@ -121,5 +135,43 @@ struct SegmentRow: View {
 
             Spacer(minLength: 0)
         }
+    }
+
+    /// A red dot with a system-background halo, slid down the bar by `progress`.
+    @ViewBuilder
+    private var progressDot: some View {
+        if let progress {
+            GeometryReader { geo in
+                ZStack {
+                    Circle().fill(Color(.systemBackground)).frame(width: 12, height: 12)
+                    Circle().fill(.red).frame(width: 8, height: 8)
+                }
+                .position(x: geo.size.width / 2, y: geo.size.height * progress)
+                .animation(.easeInOut, value: progress)
+            }
+        }
+    }
+}
+
+#Preview("Current row progress") {
+    CurrentRowPreview()
+}
+
+private struct CurrentRowPreview: View {
+    var body: some View {
+        let day = TripDay(order: 0, date: "2026-06-29", label: "Day")
+        let segment = TripSegment(
+            id: "preview", order: 0, kindRaw: "activity", time: "15:00", endTime: "18:00",
+            title: "Wander Notting Hill", summary: "Portobello Road", info: nil, detail: "",
+            ref: nil, seat: nil, attachments: [], link: nil, pinName: nil, pinAddress: nil,
+            latitude: nil, longitude: nil
+        )
+        segment.day = day
+        let now = DateText.dateTime(day: "2026-06-29", time: "16:30") ?? Date()
+        return List {
+            SegmentRow(segment: segment, isCurrent: true, now: now)
+                .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
     }
 }

@@ -69,11 +69,14 @@ struct TripListView: View {
                                          DetailLevel.minimal.rawValue),
                                      DetailLevel.full.rawValue)
                     if let level = DetailLevel(rawValue: target), level != detailLevel {
-                        withAnimation(.snappy) { detailLevel = level }
+                        withAnimation(.tripInteractive) { detailLevel = level }
                     }
                 }
                 .onEnded { _ in pinchBaseLevel = nil }
         )
+        .animation(.trip, value: hideCompleted)
+        .animation(.trip, value: todayOnly)
+        .animation(.trip, value: hiddenKinds)
         .navigationTitle("Your Trip")
         .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
         .searchable(text: $search, prompt: "Search")

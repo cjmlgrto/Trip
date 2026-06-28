@@ -55,7 +55,6 @@ struct SegmentDetailView: View {
             }
         }
         .navigationTitle(segment.title)
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     @ViewBuilder

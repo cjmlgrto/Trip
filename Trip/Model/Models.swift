@@ -44,11 +44,6 @@ final class TripDay {
     var orderedSegments: [TripSegment] {
         segments.sorted { $0.order < $1.order }
     }
-
-    /// "Sun 28 Jun — Departure" style section header.
-    var header: String {
-        "\(DateText.weekdayDate(date)) — \(label)"
-    }
 }
 
 @Model
@@ -59,6 +54,7 @@ final class TripSegment {
     var time: String
     var title: String
     var summary: String
+    var info: String?
     var detail: String
     var ref: String?
     var seat: String?
@@ -74,15 +70,16 @@ final class TripSegment {
     var day: TripDay?
 
     init(id: String, order: Int, kindRaw: String, time: String, title: String,
-         summary: String, detail: String, ref: String?, seat: String?, file: String?,
-         link: String?, pinName: String?, pinAddress: String?, latitude: Double?,
-         longitude: Double?, reserved: Bool) {
+         summary: String, info: String?, detail: String, ref: String?, seat: String?,
+         file: String?, link: String?, pinName: String?, pinAddress: String?,
+         latitude: Double?, longitude: Double?, reserved: Bool) {
         self.id = id
         self.order = order
         self.kindRaw = kindRaw
         self.time = time
         self.title = title
         self.summary = summary
+        self.info = info
         self.detail = detail
         self.ref = ref
         self.seat = seat
@@ -106,7 +103,7 @@ final class TripSegment {
 
     /// Free-text haystack for `.searchable`.
     var matchText: String {
-        [title, summary, detail, ref ?? "", seat ?? "", pinName ?? "", time]
+        [title, summary, info ?? "", detail, ref ?? "", seat ?? "", pinName ?? "", time]
             .joined(separator: " ").lowercased()
     }
 }
@@ -141,9 +138,25 @@ enum DateText {
         return weekday.string(from: date)
     }
 
+    /// "Sunday, Jun 28" — the day-header title.
+    static func longDate(_ day: String) -> String {
+        guard let date = ymd.date(from: day) else { return day }
+        return longDay.string(from: date)
+    }
+
+    /// Combines a day + "HH:mm" time into a local Date, for Now/current logic.
+    static func dateTime(day: String, time: String) -> Date? {
+        guard !time.isEmpty else { return ymd.date(from: day) }
+        return ymdhm.date(from: "\(day) \(time)")
+    }
+
     private static let ymd: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy-MM-dd"; return f
+    }()
+    private static let ymdhm: DateFormatter = {
+        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd HH:mm"; return f
     }()
     private static let hhmm: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
@@ -155,5 +168,8 @@ enum DateText {
     }()
     private static let weekday: DateFormatter = {
         let f = DateFormatter(); f.dateFormat = "EEE d MMM"; return f
+    }()
+    private static let longDay: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "EEEE, MMM d"; return f
     }()
 }

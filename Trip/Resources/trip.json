@@ -1,280 +1,278 @@
 {
   "trip": {
-    "title": "London · Paris · Buxton",
-    "subtitle": "Wedding of the year",
+    "title": "Your Trip",
+    "subtitle": "A week in London, Paris and Buxton",
     "startDate": "2026-06-28",
     "endDate": "2026-07-05",
     "traveler": "Carlos Melegrito",
     "days": [
       {
         "date": "2026-06-28",
-        "label": "Departure",
+        "label": "Fly out to London tonight",
         "city": "Travel",
         "segments": [
           {
             "id": "dep-sfo",
             "type": "flight",
             "time": "17:55",
-            "title": "Depart SFO → London Heathrow",
-            "summary": "Virgin Atlantic VS20 · 10h 20m overnight",
-            "detail": "Direct, Economy. 1 carry-on (max 10kg, 56×36×23cm) + 1 personal item only. No checked bags.",
+            "title": "Fly to London",
+            "summary": "San Francisco Airport",
+            "info": "Ref EAU2YY, carry-on only",
+            "detail": "Virgin Atlantic VS20, a direct overnight flight to Heathrow that takes about 10 hours and 20 minutes in economy. You have one carry-on up to 10kg plus a personal item, and no checked bags.",
             "ref": "EAU2YY",
-            "pin": { "name": "San Francisco International Airport (SFO)", "lat": 37.6213, "lng": -122.3790, "address": "San Francisco, CA 94128, USA" },
+            "pin": { "name": "San Francisco International Airport", "lat": 37.6213, "lng": -122.3790, "address": "San Francisco, CA 94128, USA" },
             "file": "flight-booking-details.pdf",
-            "link": "https://www.virginatlantic.com/manage-booking",
-            "completed": false
+            "link": "https://www.virginatlantic.com/manage-booking"
           }
         ]
       },
       {
         "date": "2026-06-29",
-        "label": "Day 1 — Arrive London",
+        "label": "Arrive and settle into London",
         "city": "London",
         "segments": [
           {
             "id": "arr-lhr",
             "type": "flight",
             "time": "12:15",
-            "title": "Land at London Heathrow",
-            "summary": "Clear passport control → Elizabeth line to central London",
-            "detail": "Take the Elizabeth line from LHR to Paddington (~30 min, ~£13), then 10-min walk / short Tube to hotel. Contactless card works directly — no Oyster needed.",
-            "pin": { "name": "London Heathrow Airport (LHR)", "lat": 51.4700, "lng": -0.4543, "address": "Longford TW6, UK" },
-            "link": "https://tfl.gov.uk/plan-a-journey/",
-            "completed": false
+            "title": "Land at Heathrow",
+            "summary": "London Heathrow",
+            "info": "Take the Elizabeth line into town",
+            "detail": "Clear passport control, then ride the Elizabeth line to Paddington, roughly 30 minutes and about 13 pounds. Your contactless card works directly, so you do not need an Oyster card.",
+            "pin": { "name": "London Heathrow Airport", "lat": 51.4700, "lng": -0.4543, "address": "Longford TW6, UK" },
+            "link": "https://tfl.gov.uk/plan-a-journey/"
           },
           {
             "id": "hotel-london",
             "type": "hotel",
             "time": "15:00",
-            "title": "Check in — Four Points Flex by Sheraton London Euston",
-            "summary": "Bloomsbury · 2 nights · ref 6024.959.454",
-            "detail": "8–11 Upper Woburn Place, Camden, WC1H 0JV. Windowless Double Pod (very dark — good for jet-lag sleep). No breakfast included. £100 damage deposit required on arrival by credit card (refunded within 7 days). Free cancellation was until Jun 21. Check-out Jul 1 by 12:00.",
+            "title": "Check in to the hotel",
+            "summary": "Bloomsbury, London",
+            "info": "Ref 6024.959.454, 100 pound deposit",
+            "detail": "Four Points Flex by Sheraton on Upper Woburn Place. It is a windowless double pod, very dark and good for jet lagged sleep. No breakfast is included, and they take a 100 pound damage deposit on arrival that is refunded within a week. Check out is Wednesday by noon.",
             "ref": "6024.959.454",
             "pin": { "name": "Four Points Flex by Sheraton London Euston", "lat": 51.5264, "lng": -0.1294, "address": "8-11 Upper Woburn Place, London WC1H 0JV, UK" },
             "file": "hotel-london-fourpoints.pdf",
-            "link": "https://www.booking.com",
-            "completed": false
+            "link": "https://www.booking.com"
           },
           {
             "id": "notting-hill",
             "type": "activity",
             "time": "15:00",
-            "title": "Notting Hill",
-            "summary": "Portobello Road, boutiques, late lunch",
-            "detail": "Elizabeth line one stop from Paddington to Notting Hill Gate (~5 min). Portobello Road antique market runs Mon–Sat (winds down ~5pm — go there first). Pastel terraces on Lansdowne Road, Electric Cinema, independent coffee. Easy decompression after the flight.",
-            "pin": { "name": "Portobello Road Market", "lat": 51.5170, "lng": -0.2050, "address": "Portobello Rd, London W11, UK" },
-            "completed": false
+            "title": "Wander Notting Hill",
+            "summary": "Portobello Road",
+            "info": "The market winds down around 5pm",
+            "detail": "One stop on the Elizabeth line from Paddington to Notting Hill Gate. The Portobello Road antiques market winds down around 5pm, so head there first. There are pastel terraces on Lansdowne Road, the Electric Cinema, and good independent coffee. An easy way to decompress after the flight.",
+            "pin": { "name": "Portobello Road Market", "lat": 51.5170, "lng": -0.2050, "address": "Portobello Rd, London W11, UK" }
           },
           {
             "id": "dinner-fallow",
             "type": "meal",
             "time": "19:30",
-            "title": "Dinner — Fallow",
-            "summary": "Reserved 19:30 · St James's",
-            "detail": "One of London's best right now — nose-to-tail British cooking, exceptional cocktails. 2 St James's Market, SW1Y 4AH. ~20 min from Notting Hill Gate by Tube. Save your appetite. Budget ~£80–100 with drinks.",
-            "pin": { "name": "Fallow St. James's", "lat": 51.5089, "lng": -0.1325, "address": "2 St James's Market, London SW1Y 4AH, UK" },
+            "title": "Dinner at Fallow",
+            "summary": "St James's",
+            "info": "Booked for 7:30pm",
+            "detail": "One of the best places in London right now, with nose to tail British cooking and excellent cocktails. It is about 20 minutes from Notting Hill Gate by Tube. Save your appetite, and budget around 80 to 100 pounds with drinks.",
+            "pin": { "name": "Fallow St James's", "lat": 51.5089, "lng": -0.1325, "address": "2 St James's Market, London SW1Y 4AH, UK" },
             "link": "https://fallowrestaurant.com",
-            "reserved": true,
-            "completed": false
+            "reserved": true
           }
         ]
       },
       {
         "date": "2026-07-01",
-        "label": "Day 2 — London → Paris",
-        "city": "London→Paris",
+        "label": "Sightseeing, then the train to Paris",
+        "city": "London",
         "segments": [
           {
             "id": "westminster",
             "type": "activity",
             "time": "09:00",
             "title": "Westminster Abbey",
-            "summary": "Gothic coronation church · ~£27 · pre-book",
-            "detail": "Every British monarch since 1066 crowned here. Arrive at 9am opening to beat groups. Allow 90 min. BOOK TIMED ENTRY IN ADVANCE.",
+            "summary": "Westminster",
+            "info": "Book a timed entry, about 27 pounds",
+            "detail": "Every British monarch since 1066 was crowned here. Arrive for the 9am opening to beat the tour groups, and allow about 90 minutes. Book your timed entry in advance.",
             "pin": { "name": "Westminster Abbey", "lat": 51.4994, "lng": -0.1273, "address": "20 Deans Yd, London SW1P 3PA, UK" },
-            "link": "https://www.westminster-abbey.org/visit-us/tickets",
-            "completed": false
+            "link": "https://www.westminster-abbey.org/visit-us/tickets"
           },
           {
             "id": "british-museum",
             "type": "activity",
             "time": "11:00",
             "title": "British Museum",
-            "summary": "Free · pre-book timed slot · 5 min from hotel",
-            "detail": "Rosetta Stone, Egyptian mummies, Elgin Marbles, the Foster Great Court. Allow 2 hrs. Free entry but reserve a timed slot online.",
+            "summary": "Great Russell Street",
+            "info": "Free, but reserve a slot",
+            "detail": "The Rosetta Stone, Egyptian mummies, the Parthenon sculptures, and the Great Court. Allow about two hours. Entry is free but you still need to reserve a timed slot online. It is a five minute walk from the hotel.",
             "pin": { "name": "The British Museum", "lat": 51.5194, "lng": -0.1270, "address": "Great Russell St, London WC1B 3DG, UK" },
-            "link": "https://www.britishmuseum.org/visit",
-            "completed": false
+            "link": "https://www.britishmuseum.org/visit"
           },
           {
             "id": "eurostar-out",
             "type": "train",
             "time": "13:31",
-            "title": "Eurostar 9028: London St Pancras → Paris Gare du Nord",
-            "summary": "Coach 16, Seat 48 · arrives 16:59 · ref C64F2Q",
-            "detail": "2h 28m direct. Arrive St Pancras 60–90 min early — airport-style passport control + security. Gates close 30 min before departure. COMPLETE ADVANCE PASSENGER INFO (API) BEFORE TRAVEL — required to collect tickets.",
+            "title": "Eurostar to Paris",
+            "summary": "St Pancras International",
+            "info": "Coach 16, seat 48, ref C64F2Q",
+            "detail": "About two and a half hours direct to Gare du Nord. Arrive at St Pancras 60 to 90 minutes early for the airport style passport control and security. Gates close 30 minutes before departure. Complete your advance passenger information beforehand, since you need it to collect the tickets.",
             "ref": "C64F2Q",
-            "seat": "Coach 16 · Seat 48",
+            "seat": "Coach 16, Seat 48",
             "pin": { "name": "London St Pancras International", "lat": 51.5320, "lng": -0.1263, "address": "Euston Rd, London N1C 4QP, UK" },
             "file": "eurostar-confirmation.pdf",
-            "link": "https://www.eurostar.com/uk-en/manage-booking",
-            "completed": false
+            "link": "https://www.eurostar.com/uk-en/manage-booking"
           },
           {
             "id": "hotel-paris",
             "type": "hotel",
             "time": "17:30",
-            "title": "Check in — Hôtel d'Amiens",
-            "summary": "10th arr. · 2 nights · ref 5168.187.346 · PIN 4212",
-            "detail": "11 Rue des Deux Gares, 75010 Paris. 8-min walk from Gare du Nord. Twin room, ground floor, courtyard view, AC, soundproofed. No breakfast. ~$423 incl. city tax, pay at property. Free cancellation was until Jun 29. Update arrival-time special request to 17:00–18:00. Check-out Jul 3 by 12:00.",
+            "title": "Check in to the hotel",
+            "summary": "10th arrondissement, Paris",
+            "info": "Ref 5168.187.346, door PIN 4212",
+            "detail": "Hotel d'Amiens on Rue des Deux Gares, an eight minute walk from Gare du Nord. It is a quiet twin room on the ground floor with air conditioning and good soundproofing. No breakfast, around 423 dollars including city tax, paid at the property. Check out is Friday by noon.",
             "ref": "5168.187.346",
-            "pin": { "name": "Hôtel d'Amiens", "lat": 48.8784, "lng": 2.3573, "address": "11 Rue des Deux Gares, 75010 Paris, France" },
+            "pin": { "name": "Hotel d'Amiens", "lat": 48.8784, "lng": 2.3573, "address": "11 Rue des Deux Gares, 75010 Paris, France" },
             "file": "hotel-paris-amiens.pdf",
-            "link": "https://www.booking.com",
-            "completed": false
+            "link": "https://www.booking.com"
           },
           {
             "id": "paris-evening",
             "type": "activity",
             "time": "19:30",
-            "title": "First evening in Paris — Canal Saint-Martin",
-            "summary": "Wine bar + dinner · or Louvre late opening (Wed til 21:45)",
-            "detail": "Drop bags and explore. The Louvre has late opening Wednesdays until 21:45 if you have energy. Otherwise head to Canal Saint-Martin (15-min walk) for natural wine and small plates.",
-            "pin": { "name": "Canal Saint-Martin", "lat": 48.8709, "lng": 2.3674, "address": "Quai de Valmy, 75010 Paris, France" },
-            "completed": false
+            "title": "First evening in Paris",
+            "summary": "Canal Saint Martin",
+            "info": "Wine and small plates",
+            "detail": "Drop your bags and explore. If you still have energy, the Louvre stays open late on Wednesdays until 9:45pm. Otherwise head to Canal Saint Martin, about 15 minutes on foot, for natural wine and small plates.",
+            "pin": { "name": "Canal Saint Martin", "lat": 48.8709, "lng": 2.3674, "address": "Quai de Valmy, 75010 Paris, France" }
           }
         ]
       },
       {
         "date": "2026-07-02",
-        "label": "Day 3 — Paris",
+        "label": "A full day in Paris",
         "city": "Paris",
         "segments": [
           {
             "id": "bakery-1",
             "type": "meal",
             "time": "09:00",
-            "title": "Boulangerie breakfast",
-            "summary": "Café au lait + pain au chocolat",
-            "detail": "Find a neighbourhood boulangerie near the hotel. Order standing at the bar like a local.",
-            "pin": { "name": "Du Pain et des Idées", "lat": 48.8716, "lng": 2.3627, "address": "34 Rue Yves Toudic, 75010 Paris, France" },
-            "completed": false
+            "title": "Breakfast at the bakery",
+            "summary": "Rue Yves Toudic",
+            "info": "Order at the counter like a local",
+            "detail": "Find a neighbourhood boulangerie near the hotel. A cafe au lait and a pain au chocolat, taken standing at the bar like a local.",
+            "pin": { "name": "Du Pain et des Idees", "lat": 48.8716, "lng": 2.3627, "address": "34 Rue Yves Toudic, 75010 Paris, France" }
           },
           {
             "id": "louvre",
             "type": "activity",
             "time": "10:00",
             "title": "The Louvre",
-            "summary": "~€22 · book 9–10am timed entry · open til 18:00 Thu",
-            "detail": "Closed Tuesdays — Thursday is correct. Book a morning slot. Go straight to the Mona Lisa (Salle 711) before groups. Venus de Milo, Winged Victory. Allow 2.5–3 hrs.",
+            "summary": "Rue de Rivoli",
+            "info": "Book a 9 to 10am slot, about 22 euros",
+            "detail": "It is closed on Tuesdays, so Thursday works well. Book a morning slot and head straight to the Mona Lisa before the groups arrive. The Venus de Milo and the Winged Victory are nearby. Allow two and a half to three hours.",
             "pin": { "name": "Louvre Museum", "lat": 48.8606, "lng": 2.3376, "address": "Rue de Rivoli, 75001 Paris, France" },
-            "link": "https://www.ticketlouvre.fr/",
-            "completed": false
+            "link": "https://www.ticketlouvre.fr/"
           },
           {
             "id": "tuileries",
             "type": "meal",
             "time": "13:00",
-            "title": "Jardin des Tuileries picnic",
-            "summary": "Baguette, cheese, charcuterie · ~€15–20",
-            "detail": "Grab supplies from a boulangerie and picnic in the gardens between the Louvre and Place de la Concorde.",
-            "pin": { "name": "Jardin des Tuileries", "lat": 48.8634, "lng": 2.3275, "address": "75001 Paris, France" },
-            "completed": false
+            "title": "Picnic in the Tuileries",
+            "summary": "Jardin des Tuileries",
+            "info": "Grab bread and cheese on the way",
+            "detail": "Pick up supplies from a boulangerie and picnic in the gardens between the Louvre and Place de la Concorde. Around 15 to 20 euros.",
+            "pin": { "name": "Jardin des Tuileries", "lat": 48.8634, "lng": 2.3275, "address": "75001 Paris, France" }
           },
           {
             "id": "marais-notredame",
             "type": "activity",
             "time": "15:00",
-            "title": "Le Marais & Notre-Dame",
-            "summary": "Medieval streets + cathedral · free entry, book slot",
-            "detail": "Walk through the Marais (galleries, falafel on Rue des Rosiers) to Île de la Cité. Notre-Dame reopened Dec 2024 — free entry, reserve a timed slot online to skip the queue.",
-            "pin": { "name": "Cathédrale Notre-Dame de Paris", "lat": 48.8530, "lng": 2.3499, "address": "6 Parvis Notre-Dame, 75004 Paris, France" },
-            "link": "https://www.notredamedeparis.fr/en/",
-            "completed": false
+            "title": "Le Marais and Notre Dame",
+            "summary": "Ile de la Cite",
+            "info": "Reserve a free Notre Dame slot",
+            "detail": "Walk through the Marais, with its galleries and the falafel spots on Rue des Rosiers, over to the Ile de la Cite. Notre Dame reopened in December 2024. Entry is free but reserve a timed slot to skip the queue.",
+            "pin": { "name": "Cathedrale Notre Dame de Paris", "lat": 48.8530, "lng": 2.3499, "address": "6 Parvis Notre-Dame, 75004 Paris, France" },
+            "link": "https://www.notredamedeparis.fr/en/"
           },
           {
             "id": "montmartre",
             "type": "activity",
             "time": "18:00",
-            "title": "Montmartre & Sacré-Cœur",
-            "summary": "Sunset views + last Paris dinner",
-            "detail": "Metro up to Montmartre. Sacré-Cœur (free), street artists on Place du Tertre, terrace dinner with city views at dusk. Budget ~€45–65 for dinner.",
-            "pin": { "name": "Basilique du Sacré-Cœur", "lat": 48.8867, "lng": 2.3431, "address": "35 Rue du Chevalier de la Barre, 75018 Paris, France" },
-            "completed": false
+            "title": "Sunset in Montmartre",
+            "summary": "Sacre Coeur",
+            "info": "Have your last Paris dinner up here",
+            "detail": "Take the metro up to Montmartre for Sacre Coeur, which is free, and the street artists on Place du Tertre. Have a terrace dinner with city views at dusk, around 45 to 65 euros.",
+            "pin": { "name": "Basilique du Sacre Coeur", "lat": 48.8867, "lng": 2.3431, "address": "35 Rue du Chevalier de la Barre, 75018 Paris, France" }
           }
         ]
       },
       {
         "date": "2026-07-03",
-        "label": "The Big Travel Day — Paris → Buxton",
+        "label": "The long travel day to Buxton",
         "city": "Travel",
         "segments": [
           {
             "id": "eurostar-back",
             "type": "train",
             "time": "07:02",
-            "title": "Eurostar 9007: Paris Gare du Nord → London St Pancras",
-            "summary": "Coach 13, Seat 24 · arrives 08:30 · ref C64F2Q",
-            "detail": "2h 28m direct. Arrive Gare du Nord by 05:30 for check-in — French passport control + security. This is the most time-critical moment of the trip. Hotel is an 8-min walk from the station.",
+            "title": "Eurostar back to London",
+            "summary": "Gare du Nord",
+            "info": "Coach 13, seat 24, be there by 5:30am",
+            "detail": "About two and a half hours direct to St Pancras. Get to Gare du Nord by 5:30am for check in, French passport control and security. This is the most time critical moment of the trip. The hotel is an eight minute walk from the station.",
             "ref": "C64F2Q",
-            "seat": "Coach 13 · Seat 24",
+            "seat": "Coach 13, Seat 24",
             "pin": { "name": "Paris Gare du Nord", "lat": 48.8809, "lng": 2.3553, "address": "18 Rue de Dunkerque, 75010 Paris, France" },
             "file": "eurostar-confirmation.pdf",
-            "link": "https://www.eurostar.com/uk-en/manage-booking",
-            "completed": false
+            "link": "https://www.eurostar.com/uk-en/manage-booking"
           },
           {
             "id": "walk-euston",
             "type": "activity",
             "time": "08:30",
-            "title": "St Pancras → Euston (walk)",
-            "summary": "12–15 min walk · 4h43m buffer before Avanti",
-            "detail": "Arrive St Pancras 08:30. Walk 12–15 min to Euston. Huge buffer before the 13:13 — have a proper sit-down breakfast. Don't dawdle but no need to rush.",
-            "pin": { "name": "London Euston Station", "lat": 51.5282, "lng": -0.1337, "address": "Euston Rd, London NW1 2RT, UK" },
-            "completed": false
+            "title": "Walk to Euston",
+            "summary": "St Pancras to Euston",
+            "info": "About a 15 minute walk",
+            "detail": "You arrive into St Pancras at 8:30am. Euston is a 12 to 15 minute walk away. You have a big buffer before the 1:13pm train, so have a proper sit down breakfast. No need to rush.",
+            "pin": { "name": "London Euston Station", "lat": 51.5282, "lng": -0.1337, "address": "Euston Rd, London NW1 2RT, UK" }
           },
           {
             "id": "avanti-out",
             "type": "train",
             "time": "13:13",
-            "title": "Avanti: London Euston → Manchester Piccadilly",
-            "summary": "Coach E, Seat 33 · arrives 15:19 · ref OT982003",
-            "detail": "2h 6m direct. ADVANCE SINGLE — you MUST board this specific 13:13 train. Missing it means buying a new full-price ticket. £43.50.",
+            "title": "Train to Manchester",
+            "summary": "London Euston",
+            "info": "Coach E, seat 33, catch the 1:13pm exactly",
+            "detail": "Just over two hours direct to Manchester Piccadilly. This is an advance single, so you have to board this exact 1:13pm train. Miss it and you have to buy a new full price ticket. It cost 43 pounds 50.",
             "ref": "OT982003",
-            "seat": "Coach E · Seat 33",
+            "seat": "Coach E, Seat 33",
             "pin": { "name": "Manchester Piccadilly", "lat": 53.4774, "lng": -2.2309, "address": "Manchester M60 7RA, UK" },
             "file": "avanti-euston-manchester.pdf",
-            "link": "https://www.avantiwestcoast.co.uk/",
-            "completed": false
+            "link": "https://www.avantiwestcoast.co.uk/"
           },
           {
             "id": "northern-to-buxton",
             "type": "train",
             "time": "15:30",
-            "title": "Manchester Piccadilly → Buxton (Northern)",
-            "summary": "~1 hr · buy on the day · ~£5–8",
-            "detail": "Trains hourly. Aim ~15:15–16:15. Buy at the station machine or Northern app — no advance discount. Tap contactless.",
-            "ref": "Buy on day",
+            "title": "Train to Buxton",
+            "summary": "Manchester Piccadilly",
+            "info": "Buy on the day, about 5 to 8 pounds",
+            "detail": "Trains run hourly and take about an hour. Aim for something between 3:15 and 4:15pm. Buy at the station machine or in the Northern app, since there is no advance discount. Tap contactless.",
             "pin": { "name": "Buxton Railway Station", "lat": 53.2596, "lng": -1.9134, "address": "Station Rd, Buxton SK17 6HX, UK" },
-            "link": "https://www.northernrailway.co.uk/",
-            "completed": false
+            "link": "https://www.northernrailway.co.uk/"
           },
           {
             "id": "arrive-buxton",
             "type": "hotel",
             "time": "16:30",
-            "title": "Arrive Buxton — check in",
-            "summary": "⚠️ HOTEL NOT YET BOOKED",
-            "detail": "Settle in, explore Pavilion Gardens, low-key dinner, early night before the wedding. BOOK ACCOMMODATION — Old Hall Hotel or Palace Hotel & Spa.",
-            "ref": "PENDING",
-            "pin": { "name": "Buxton, Derbyshire", "lat": 53.2587, "lng": -1.9112, "address": "Buxton, UK" },
-            "completed": false
+            "title": "Arrive in Buxton",
+            "summary": "Buxton, Derbyshire",
+            "info": "You still need to book a hotel",
+            "detail": "Settle in, wander the Pavilion Gardens, have a low key dinner and an early night before the wedding. You still need to book a place to stay, so look at the Old Hall Hotel or the Palace Hotel and Spa.",
+            "pin": { "name": "Buxton, Derbyshire", "lat": 53.2587, "lng": -1.9112, "address": "Buxton, UK" }
           }
         ]
       },
       {
         "date": "2026-07-04",
-        "label": "The Wedding 🎉",
+        "label": "The wedding",
         "city": "Wedding",
         "segments": [
           {
@@ -282,77 +280,75 @@
             "type": "activity",
             "time": "10:00",
             "title": "Morning in Buxton",
-            "summary": "Pavilion Gardens, The Crescent, cafés",
-            "detail": "Explore the spa town. Pavilion Gardens and the restored Crescent are worth a stroll.",
-            "pin": { "name": "Buxton Pavilion Gardens", "lat": 53.2596, "lng": -1.9156, "address": "St John's Rd, Buxton SK17 6BE, UK" },
-            "completed": false
+            "summary": "Pavilion Gardens",
+            "info": "Coffee and a slow stroll",
+            "detail": "Explore the spa town. The Pavilion Gardens and the restored Crescent are both worth a stroll.",
+            "pin": { "name": "Buxton Pavilion Gardens", "lat": 53.2596, "lng": -1.9156, "address": "St John's Rd, Buxton SK17 6BE, UK" }
           },
           {
             "id": "wedding",
             "type": "wedding",
             "time": "13:00",
-            "title": "Wedding ceremony & reception",
-            "summary": "Confirm time & venue with the couple",
-            "detail": "Smart-formal. UK July — pack a light jacket and consider waterproof shoes. Confirm exact timing and venue details.",
-            "pin": { "name": "Buxton, Derbyshire", "lat": 53.2587, "lng": -1.9112, "address": "Buxton, UK" },
-            "completed": false
+            "title": "The wedding",
+            "summary": "Buxton",
+            "info": "Smart formal, bring a light jacket",
+            "detail": "Confirm the exact time and venue with the couple. The dress code is smart formal, and a UK July can turn, so pack a light jacket and maybe waterproof shoes.",
+            "pin": { "name": "Buxton, Derbyshire", "lat": 53.2587, "lng": -1.9112, "address": "Buxton, UK" }
           }
         ]
       },
       {
         "date": "2026-07-05",
-        "label": "Departure — Back to SFO",
+        "label": "Head home to San Francisco",
         "city": "Travel",
         "segments": [
           {
             "id": "buxton-to-manchester",
             "type": "train",
             "time": "08:20",
-            "title": "Buxton → Manchester Piccadilly (Northern)",
-            "summary": "~1 hr · buy on day · verify Sunday timetable",
-            "detail": "Leave Buxton ~08:20 to reach Piccadilly ~09:20 for the 09:27 onward train. Northern has Sunday conductor disruption — CHECK nationalrail.co.uk a few days before. Buy at machine.",
-            "ref": "Buy on day",
+            "title": "Train to Manchester",
+            "summary": "Buxton",
+            "info": "Buy on the day, check the Sunday times",
+            "detail": "Leave Buxton around 8:20am to reach Piccadilly by about 9:20am for the onward train. Northern can have Sunday disruptions, so check National Rail a few days before. Buy at the machine.",
             "pin": { "name": "Buxton Railway Station", "lat": 53.2596, "lng": -1.9134, "address": "Station Rd, Buxton SK17 6HX, UK" },
-            "link": "https://www.nationalrail.co.uk/",
-            "completed": false
+            "link": "https://www.nationalrail.co.uk/"
           },
           {
             "id": "lnr-back",
             "type": "train",
             "time": "09:27",
-            "title": "Manchester Piccadilly → London Euston (LNR)",
-            "summary": "Super Off-Peak · LNR ONLY (not Avanti) · ref TTBMDHRYTQP",
-            "detail": "Flexible Super Off-Peak Single, valid ONLY on LNR/WMR&TFW services — NOT Avanti. ~2h15–30m via Milton Keynes. £42.90. Aim to be at Euston by ~12:30.",
+            "title": "Train to London",
+            "summary": "Manchester Piccadilly",
+            "info": "London Northwestern only, not Avanti",
+            "detail": "A flexible off peak single, valid only on London Northwestern and connecting services, not Avanti. About two and a quarter hours via Milton Keynes. Aim to be at Euston by around 12:30pm. It cost 42 pounds 90.",
             "ref": "TTBMDHRYTQP",
             "pin": { "name": "Manchester Piccadilly", "lat": 53.4774, "lng": -2.2309, "address": "Manchester M60 7RA, UK" },
             "file": "lnr-manchester-euston.pdf",
-            "link": "https://www.nationalrail.co.uk/",
-            "completed": false
+            "link": "https://www.nationalrail.co.uk/"
           },
           {
             "id": "euston-to-lhr",
             "type": "activity",
             "time": "12:30",
-            "title": "Euston → Heathrow T3 (Elizabeth line)",
-            "summary": "~10 min walk to Paddington, then ~45 min to T3",
-            "detail": "Walk to Paddington (~10 min), Elizabeth line direct to Heathrow T3 (~45 min, ~£13). Arrive T3 by ~14:00–14:30 — comfortable buffer before the 18:30 flight.",
+            "title": "Head to Heathrow",
+            "summary": "Paddington to Terminal 3",
+            "info": "Elizabeth line, about 45 minutes",
+            "detail": "Walk to Paddington, about 10 minutes, then take the Elizabeth line straight to Heathrow Terminal 3, roughly 45 minutes and about 13 pounds. Aim to arrive by 2 to 2:30pm, a comfortable buffer before the flight.",
             "pin": { "name": "London Paddington", "lat": 51.5154, "lng": -0.1755, "address": "Praed St, London W2 1HQ, UK" },
-            "link": "https://tfl.gov.uk/plan-a-journey/",
-            "completed": false
+            "link": "https://tfl.gov.uk/plan-a-journey/"
           },
           {
             "id": "fly-home",
             "type": "flight",
             "time": "18:30",
-            "title": "Depart LHR → SFO (VS41)",
-            "summary": "Virgin Atlantic · arrives SFO 21:25 same day · ref EAU2YY",
-            "detail": "10h 55m direct, Economy. Be at T3 3 hours before — by ~15:30 ideally.",
+            "title": "Fly home",
+            "summary": "Heathrow Terminal 3",
+            "info": "Ref EAU2YY, be there by 3:30pm",
+            "detail": "Virgin Atlantic VS41, just under 11 hours direct back to San Francisco in economy, arriving the same day at 9:25pm local time. Be at Terminal 3 about three hours before, so by 3:30pm.",
             "ref": "EAU2YY",
-            "seat": "",
             "pin": { "name": "London Heathrow Terminal 3", "lat": 51.4710, "lng": -0.4590, "address": "Heathrow Airport, Hounslow TW6 1QG, UK" },
             "file": "flight-booking-details.pdf",
-            "link": "https://www.virginatlantic.com/manage-booking",
-            "completed": false
+            "link": "https://www.virginatlantic.com/manage-booking"
           }
         ]
       }

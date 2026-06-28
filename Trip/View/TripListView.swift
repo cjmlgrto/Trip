@@ -1,11 +1,12 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 // MARK: - The trip — one scrollable list, read top to bottom
 //
-// Days are sections; tapping a row opens its detail. Search and a single
-// "Hide Completed" toggle are the only controls. Completion is a leading swipe,
-// so you can follow along the trip as it happens.
+// A plain list of day headers and itinerary items, matching the design. The
+// "current" item (by device clock) is highlighted; completed items dim. A
+// bottom toolbar carries a filter menu (show/hide completed) and search.
 
 struct TripListView: View {
     @Environment(\.modelContext) private var context
@@ -14,6 +15,7 @@ struct TripListView: View {
 
     @State private var search = ""
     @State private var hideCompleted = false
+    @State private var now = Date()
 
     var body: some View {
         NavigationStack {
@@ -21,14 +23,18 @@ struct TripListView: View {
                 ForEach(days) { day in
                     let segments = visibleSegments(in: day)
                     if !segments.isEmpty {
-                        Section(day.header) {
-                            ForEach(segments) { segment in
-                                NavigationLink(value: segment) {
-                                    SegmentRow(segment: segment)
-                                }
-                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                    completeButton(for: segment)
-                                }
+                        DayHeaderView(title: DateText.longDate(day.date), summary: day.label)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(.init(top: 24, leading: 16, bottom: 8, trailing: 16))
+
+                        ForEach(segments) { segment in
+                            NavigationLink(value: segment) {
+                                SegmentRow(segment: segment, isCurrent: segment.id == currentSegmentID)
+                            }
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
+                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                completeButton(for: segment)
                             }
                         }
                     }
@@ -38,19 +44,27 @@ struct TripListView: View {
                     ContentUnavailableView.search(text: search)
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("Your Trip")
             .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
-            .searchable(text: $search, prompt: "Search the trip")
+            .searchable(text: $search, prompt: "Search")
             .toolbar {
-                Menu {
-                    Toggle(isOn: $hideCompleted) {
-                        Label("Hide Completed", systemImage: "checkmark.circle")
+                ToolbarItem(placement: .bottomBar) {
+                    Menu {
+                        Toggle(isOn: $hideCompleted) {
+                            Label("Hide Completed", systemImage: "checkmark.circle")
+                        }
+                    } label: {
+                        Label("Filter", systemImage: hideCompleted
+                              ? "line.3.horizontal.decrease.circle.fill"
+                              : "line.3.horizontal.decrease")
                     }
-                } label: {
-                    Label("Options", systemImage: "ellipsis.circle")
                 }
+                ToolbarSpacer(.flexible, placement: .bottomBar)
+                DefaultToolbarItem(kind: .search, placement: .bottomBar)
             }
             .task { Seeding.seedIfNeeded(context) }
+            .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
         }
     }
 
@@ -63,6 +77,21 @@ struct TripListView: View {
                   systemImage: segment.isCompleted ? "arrow.uturn.backward" : "checkmark")
         }
         .tint(.green)
+    }
+
+    // MARK: - Now / current
+
+    /// The in-progress item: the last segment (chronologically) whose start time
+    /// has passed. Falls back to the first segment before the trip begins.
+    private var currentSegmentID: String? {
+        let timeline = days
+            .flatMap(\.orderedSegments)
+            .compactMap { segment -> (id: String, start: Date)? in
+                DateText.dateTime(day: segment.day?.date ?? "", time: segment.time)
+                    .map { (segment.id, $0) }
+            }
+        guard !timeline.isEmpty else { return nil }
+        return (timeline.last { $0.start <= now } ?? timeline.first)?.id
     }
 
     // MARK: - Filtering

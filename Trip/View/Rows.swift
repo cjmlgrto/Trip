@@ -121,10 +121,13 @@ struct CommuteCard: View {
     }
 
     var body: some View {
-        Label {
-            Text(summary).font(.footnote)
-        } icon: {
-            Image(systemName: symbol).font(.footnote)
+        HStack(spacing: 12) {
+            Image(systemName: symbol)
+                .font(.footnote)
+                .frame(width: 4)            // sits in the indicator rail's column
+            Text(summary)
+                .font(.footnote)
+            Spacer(minLength: 0)
         }
         .foregroundStyle(.primary)
     }

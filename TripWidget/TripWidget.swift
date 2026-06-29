@@ -5,16 +5,18 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> TripEntry {
-        TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+        TripEntry(date: .now, items: WidgetTripData.lineup(at: .now, from: WidgetTripData.events()))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TripEntry) -> Void) {
-        completion(TripEntry(date: .now, items: WidgetTripData.lineup(at: .now)))
+        let events = WidgetTripData.events()
+        completion(TripEntry(date: .now, items: WidgetTripData.lineup(at: .now, from: events)))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<TripEntry>) -> Void) {
-        let entries = WidgetTripData.refreshDates(after: .now).map { date in
-            TripEntry(date: date, items: WidgetTripData.lineup(at: date))
+        let events = WidgetTripData.events()
+        let entries = WidgetTripData.refreshDates(after: .now, from: events).map { date in
+            TripEntry(date: date, items: WidgetTripData.lineup(at: date, from: events))
         }
         completion(Timeline(entries: entries.isEmpty ? [placeholder(in: context)] : entries,
                             policy: .atEnd))
@@ -138,7 +140,7 @@ struct TripWidgetEntryView: View {
             let layout = WidgetLayout.forFamily(family)
             let shown = Array(entry.items.prefix(layout.maxEvents))
             VStack(alignment: .leading, spacing: layout.rowSpacing) {
-                Text(WidgetDate.longDate(shown.first?.event.start ?? entry.date))
+                Text(WidgetTripData.longDate(shown.first?.event.start ?? entry.date))
                     .font(.headline)
                 ForEach(shown) { WidgetEventRow(item: $0, style: layout.row) }
                 Spacer(minLength: 0)
@@ -175,17 +177,17 @@ struct TripWidget: Widget {
 #Preview("Small", as: .systemSmall) {
     TripWidget()
 } timeline: {
-    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now, from: WidgetTripData.events()))
 }
 
 #Preview("Medium", as: .systemMedium) {
     TripWidget()
 } timeline: {
-    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now, from: WidgetTripData.events()))
 }
 
 #Preview("Large", as: .systemLarge) {
     TripWidget()
 } timeline: {
-    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now))
+    TripEntry(date: .now, items: WidgetTripData.lineup(at: .now, from: WidgetTripData.events()))
 }

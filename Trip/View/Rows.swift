@@ -24,6 +24,18 @@ extension SegmentKind {
         }
     }
 
+    /// SF Symbol for the map pin balloon.
+    var symbol: String {
+        switch self {
+        case .flight:   "airplane"
+        case .train:    "tram.fill"
+        case .hotel:    "bed.double.fill"
+        case .activity: "building.columns.fill"
+        case .meal:     "fork.knife"
+        case .wedding:  "heart.fill"
+        }
+    }
+
     /// Plural label for the filter menu.
     var label: String {
         switch self {

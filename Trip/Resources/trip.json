@@ -1,7 +1,7 @@
 {
   "trip": {
-    "title": "Your Trip",
-    "subtitle": "A week in London, Paris and Buxton",
+    "title": "London, Paris & Buxton",
+    "subtitle": "A week away for the wedding",
     "startDate": "2026-06-28",
     "endDate": "2026-07-05",
     "traveler": "Carlos Melegrito",
@@ -40,8 +40,8 @@
             "time": "12:15",
             "title": "Land at Heathrow",
             "summary": "London Heathrow",
-            "info": "Take the Elizabeth line into town",
-            "detail": "Clear passport control, then ride the Elizabeth line to Paddington, roughly 30 minutes and about 13 pounds. Your contactless card works directly, so you do not need an Oyster card.",
+            "info": "Elizabeth line into town · UK ETA needed",
+            "detail": "Clear passport control, then ride the Elizabeth line to Paddington, roughly 30 minutes and about 13 pounds. Your contactless card works directly, so you do not need an Oyster card. As an Australian passport holder you must have an approved UK ETA before boarding at SFO (about 20 pounds, linked to your passport, valid two years) and airlines verify it at check in. With it approved you can use the e-gates at Heathrow.",
             "pin": { "name": "London Heathrow Airport", "lat": 51.4700, "lng": -0.4543, "address": "Longford TW6, UK" },
             "files": [
               { "name": "uk-eta.pdf", "label": "UK ETA" }
@@ -391,12 +391,12 @@
             "title": "Fly home",
             "summary": "Heathrow Terminal 3",
             "info": "Ref EAU2YY, be there by 3:30pm",
-            "detail": "Virgin Atlantic VS41, just under 11 hours direct back to San Francisco in economy, arriving the same day at 9:25pm local time. Be at Terminal 3 about three hours before, so by 3:30pm.",
+            "detail": "Virgin Atlantic VS41, just under 11 hours direct back to San Francisco in economy, arriving the same day at 9:25pm local time. Be at Terminal 3 about three hours before, so by 3:30pm. Have whatever document you need for US re-entry ready (visa, ESTA, or residency card, depending on your status) since you are travelling on an Australian passport.",
             "ref": "EAU2YY",
             "pin": { "name": "London Heathrow Terminal 3", "lat": 51.4710, "lng": -0.4590, "address": "Heathrow Airport, Hounslow TW6 1QG, UK" },
             "files": [
               { "name": "flight-booking-details.pdf", "label": "Flight booking" },
-              { "name": "us-i94.pdf", "label": "US I-94" }
+              { "name": "us-reentry.pdf", "label": "US re-entry document" }
             ],
             "link": "https://www.virginatlantic.com/manage-booking"
           }

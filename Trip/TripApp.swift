@@ -5,7 +5,7 @@ import SwiftData
 struct TripApp: App {
     var body: some Scene {
         WindowGroup {
-            TripListView()
+            RootMapView()
         }
         .modelContainer(for: [TripDay.self, TripSegment.self])
     }

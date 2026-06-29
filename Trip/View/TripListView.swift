@@ -2,11 +2,11 @@ import SwiftUI
 import SwiftData
 import Combine
 
-// MARK: - The trip — one scrollable list, read top to bottom
+// MARK: - The trip — itinerary list (content of the root map sheet)
 //
-// A plain list of day headers and itinerary items, matching the design. The
-// "current" item (by device clock) is highlighted; completed items dim. A
-// bottom toolbar carries a filter menu (show/hide completed) and search.
+// A plain list of day headers and itinerary items. The enclosing NavigationStack
+// (in RootMapView) owns navigation, so rows just push TripSegment values. The
+// "current" item (by device clock) is highlighted; completed items dim.
 
 struct TripListView: View {
     @Environment(\.modelContext) private var context
@@ -22,9 +22,7 @@ struct TripListView: View {
     @State private var now = Date()
 
     var body: some View {
-        NavigationStack {
-            itinerary
-        }
+        itinerary
     }
 
     private var itinerary: some View {
@@ -83,7 +81,6 @@ struct TripListView: View {
         .animation(.trip, value: todayOnly)
         .animation(.trip, value: hiddenKinds)
         .navigationTitle("Your Trip")
-        .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
         .searchable(text: $search, prompt: "Search")
         .searchToolbarBehavior(.minimize)
         .toolbar {
@@ -188,6 +185,8 @@ struct TripListView: View {
 }
 
 #Preview {
-    TripListView()
-        .modelContainer(PreviewData.container)
+    NavigationStack {
+        TripListView()
+    }
+    .modelContainer(PreviewData.container)
 }

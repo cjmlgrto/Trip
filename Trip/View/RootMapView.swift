@@ -25,11 +25,12 @@ struct RootMapView: View {
 
     var body: some View {
         NavigationStack {
-            Map(position: $camera) {
+            Map(position: $camera, selection: $selected) {
                 ForEach(pins) { segment in
                     if let coordinate = segment.coordinate {
-                        Marker(segment.title, coordinate: coordinate)
+                        Marker(segment.title, systemImage: segment.kind.symbol, coordinate: coordinate)
                             .tint(segment.kind.indicatorColor)
+                            .tag(segment)
                     }
                 }
             }

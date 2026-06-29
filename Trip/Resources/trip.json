@@ -55,6 +55,7 @@
             "title": "Check in to the hotel",
             "summary": "Bloomsbury, London",
             "info": "Ref 6024.959.454, 100 pound deposit",
+            "commute": { "mode": "transit", "summary": "Elizabeth line to Paddington, about 30 minutes" },
             "detail": "Four Points Flex by Sheraton on Upper Woburn Place. It is a windowless double pod, very dark and good for jet lagged sleep. No breakfast is included, and they take a 100 pound damage deposit on arrival that is refunded within a week. Check out is Wednesday by noon.",
             "ref": "6024.959.454",
             "pin": { "name": "Four Points Flex by Sheraton London Euston", "lat": 51.5264, "lng": -0.1294, "address": "8-11 Upper Woburn Place, London WC1H 0JV, UK" },
@@ -71,6 +72,7 @@
             "title": "Wander Notting Hill",
             "summary": "Portobello Road",
             "info": "The market winds down around 5pm",
+            "commute": { "mode": "transit", "summary": "One stop on the Elizabeth line, about 5 minutes" },
             "detail": "One stop on the Elizabeth line from Paddington to Notting Hill Gate. The Portobello Road antiques market winds down around 5pm, so head there first. There are pastel terraces on Lansdowne Road, the Electric Cinema, and good independent coffee. An easy way to decompress after the flight.",
             "pin": { "name": "Portobello Road Market", "lat": 51.5170, "lng": -0.2050, "address": "Portobello Rd, London W11, UK" }
           },
@@ -82,6 +84,7 @@
             "title": "Dinner at Fallow",
             "summary": "St James's",
             "info": "Booked for 7:30pm",
+            "commute": { "mode": "transit", "summary": "About 20 minutes by Tube" },
             "detail": "One of the best places in London right now, with nose to tail British cooking and excellent cocktails. It is about 20 minutes from Notting Hill Gate by Tube. Save your appetite, and budget around 80 to 100 pounds with drinks.",
             "pin": { "name": "Fallow St James's", "lat": 51.5089, "lng": -0.1325, "address": "2 St James's Market, London SW1Y 4AH, UK" },
             "link": "https://fallowrestaurant.com",
@@ -142,6 +145,7 @@
             "title": "Check in to the hotel",
             "summary": "10th arrondissement, Paris",
             "info": "Ref 5168.187.346, door PIN 4212",
+            "commute": { "mode": "walk", "summary": "An 8 minute walk from Gare du Nord" },
             "detail": "Hotel d'Amiens on Rue des Deux Gares, an eight minute walk from Gare du Nord. It is a quiet twin room on the ground floor with air conditioning and good soundproofing. No breakfast, around 423 dollars including city tax, paid at the property. Check out is Friday by noon.",
             "ref": "5168.187.346",
             "pin": { "name": "Hotel d'Amiens", "lat": 48.8784, "lng": 2.3573, "address": "11 Rue des Deux Gares, 75010 Paris, France" },
@@ -158,6 +162,7 @@
             "title": "First evening in Paris",
             "summary": "Canal Saint Martin",
             "info": "Wine and small plates",
+            "commute": { "mode": "walk", "summary": "About 15 minutes on foot" },
             "detail": "Drop your bags and explore. If you still have energy, the Louvre stays open late on Wednesdays until 9:45pm. Otherwise head to Canal Saint Martin, about 15 minutes on foot, for natural wine and small plates.",
             "pin": { "name": "Canal Saint Martin", "lat": 48.8709, "lng": 2.3674, "address": "Quai de Valmy, 75010 Paris, France" }
           }
@@ -199,6 +204,7 @@
             "title": "Picnic in the Tuileries",
             "summary": "Jardin des Tuileries",
             "info": "Grab bread and cheese on the way",
+            "commute": { "mode": "walk", "summary": "A short walk from the Louvre" },
             "detail": "Pick up supplies from a boulangerie and picnic in the gardens between the Louvre and Place de la Concorde. Around 15 to 20 euros.",
             "pin": { "name": "Jardin des Tuileries", "lat": 48.8634, "lng": 2.3275, "address": "75001 Paris, France" }
           },
@@ -210,6 +216,7 @@
             "title": "Le Marais and Notre Dame",
             "summary": "Ile de la Cite",
             "info": "Reserve a free Notre Dame slot",
+            "commute": { "mode": "walk", "summary": "A walk through the Marais" },
             "detail": "Walk through the Marais, with its galleries and the falafel spots on Rue des Rosiers, over to the Ile de la Cite. Notre Dame reopened in December 2024. Entry is free but reserve a timed slot to skip the queue.",
             "pin": { "name": "Cathedrale Notre Dame de Paris", "lat": 48.8530, "lng": 2.3499, "address": "6 Parvis Notre-Dame, 75004 Paris, France" },
             "link": "https://www.notredamedeparis.fr/en/"
@@ -222,6 +229,7 @@
             "title": "Sunset in Montmartre",
             "summary": "Sacre Coeur",
             "info": "Have your last Paris dinner up here",
+            "commute": { "mode": "transit", "summary": "Take the metro up the hill" },
             "detail": "Take the metro up to Montmartre for Sacre Coeur, which is free, and the street artists on Place du Tertre. Have a terrace dinner with city views at dusk, around 45 to 65 euros.",
             "pin": { "name": "Basilique du Sacre Coeur", "lat": 48.8867, "lng": 2.3431, "address": "35 Rue du Chevalier de la Barre, 75018 Paris, France" }
           }
@@ -296,6 +304,7 @@
             "title": "Arrive in Buxton",
             "summary": "Buxton, Derbyshire",
             "info": "You still need to book a hotel",
+            "commute": { "mode": "walk", "summary": "A short walk from the station" },
             "detail": "Settle in, wander the Pavilion Gardens, have a low key dinner and an early night before the wedding. You still need to book a place to stay, so look at the Old Hall Hotel or the Palace Hotel and Spa.",
             "pin": { "name": "Buxton, Derbyshire", "lat": 53.2587, "lng": -1.9112, "address": "Buxton, UK" }
           }

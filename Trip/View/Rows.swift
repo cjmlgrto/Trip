@@ -107,6 +107,29 @@ enum ItemState {
     }
 }
 
+/// A quiet connector between events: how you get to the next one.
+struct CommuteCard: View {
+    let mode: String
+    let summary: String
+
+    private var symbol: String {
+        switch mode {
+        case "transit": "tram.fill"
+        case "drive":   "car.fill"
+        default:        "figure.walk"
+        }
+    }
+
+    var body: some View {
+        Label {
+            Text(summary).font(.footnote)
+        } icon: {
+            Image(systemName: symbol).font(.footnote)
+        }
+        .foregroundStyle(.primary)
+    }
+}
+
 /// The big day header: "Sunday, Jun 28" over a one-line summary.
 struct DayHeaderView: View {
     let title: String
@@ -214,7 +237,7 @@ private struct CurrentRowPreview: View {
             id: "preview", order: 0, kindRaw: "activity", time: "15:00", endTime: "18:00",
             title: "Wander Notting Hill", summary: "Portobello Road", info: nil, detail: "",
             ref: nil, seat: nil, attachments: [], link: nil, pinName: nil, pinAddress: nil,
-            latitude: nil, longitude: nil
+            latitude: nil, longitude: nil, commuteMode: nil, commuteSummary: nil
         )
         segment.day = day
         let now = DateText.dateTime(day: "2026-06-29", time: "16:30") ?? Date()

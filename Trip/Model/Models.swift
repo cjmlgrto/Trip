@@ -101,12 +101,6 @@ final class TripSegment {
         guard let latitude, let longitude else { return nil }
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
-
-    /// Free-text haystack for `.searchable`.
-    var matchText: String {
-        [title, summary, info ?? "", detail, ref ?? "", seat ?? "", pinName ?? "", time]
-            .joined(separator: " ").lowercased()
-    }
 }
 
 // MARK: - Attachment

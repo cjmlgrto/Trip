@@ -22,7 +22,6 @@ struct SegmentDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 32) {
                 titleBlock
-                if segment.coordinate != nil { locationSection }
                 if !segment.detail.isEmpty { notesSection }
                 if !detailRows.isEmpty { detailsSection }
                 actions
@@ -33,6 +32,17 @@ struct SegmentDetailView: View {
         // once the large title has scrolled out of view.
         .navigationTitle(titleOnScreen ? "" : segment.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let coordinate = segment.coordinate {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        openInMaps(coordinate)
+                    } label: {
+                        Label("Open in Maps", systemImage: "map")
+                    }
+                }
+            }
+        }
     }
 
     // MARK: Title block (with rail + progress dot)
@@ -85,31 +95,6 @@ struct SegmentDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, textInset)
-    }
-
-    // MARK: Location (text inset; map runs full width)
-
-    private var locationSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if let coordinate = segment.coordinate {
-                Map(initialPosition: .region(MKCoordinateRegion(
-                    center: coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                ))) {
-                    Marker(segment.pinName ?? segment.title, coordinate: coordinate)
-                }
-                .frame(height: 168)
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .allowsHitTesting(false)
-            }
-//            Group {
-//                if let address = segment.pinAddress {
-//                    Text(address).font(.body)
-//                }
-//            }
-//            .frame(maxWidth: .infinity, alignment: .leading)
-//            .padding(.horizontal, textInset)
-        }
     }
 
     // MARK: Details table (full width, alternating fills, 16pt inset text)
@@ -174,16 +159,6 @@ struct SegmentDetailView: View {
 
     private var actions: some View {
         VStack(spacing: 16) {
-            // Primary: navigate (every event has a pin). Liquid Glass, prominent.
-            if let coordinate = segment.coordinate {
-                Button {
-                    openInMaps(coordinate)
-                } label: {
-                    Text("Open in Maps").fontWeight(.semibold).frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.glassProminent)
-            }
-
             // Secondary (optional): manage the booking when there's a link.
             if let link = segment.link, let url = URL(string: link) {
                 Button {

@@ -5,7 +5,20 @@
   "fill-specializations" : [
     {
       "value" : {
-        "automatic-gradient" : "display-p3:0.39608,0.76953,0.40015,1.00000"
+        "linear-gradient" : [
+          "extended-srgb:0.00000,0.53333,1.00000,1.00000",
+          "display-p3:0.39608,0.76953,0.40015,1.00000"
+        ],
+        "orientation" : {
+          "start" : {
+            "x" : 0.5,
+            "y" : 0
+          },
+          "stop" : {
+            "x" : 0.5,
+            "y" : 0.7
+          }
+        }
       }
     },
     {
@@ -74,10 +87,21 @@
           0
         ]
       },
-      "shadow" : {
-        "kind" : "layer-color",
-        "opacity" : 4
-      },
+      "shadow-specializations" : [
+        {
+          "value" : {
+            "kind" : "layer-color",
+            "opacity" : 4
+          }
+        },
+        {
+          "appearance" : "tinted",
+          "value" : {
+            "kind" : "layer-color",
+            "opacity" : 1.6
+          }
+        }
+      ],
       "translucency" : {
         "enabled" : false,
         "value" : 0.5
@@ -181,7 +205,7 @@
     {
       "blend-mode-specializations" : [
         {
-          "value" : "plus-darker"
+          "value" : "hard-light"
         },
         {
           "appearance" : "dark",
@@ -204,7 +228,19 @@
             }
           ],
           "hidden" : false,
-          "image-name" : "Background.png",
+          "image-name-specializations" : [
+            {
+              "value" : "Background.png"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "Background.png"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "Background.png"
+            }
+          ],
           "name" : "Background",
           "position" : {
             "scale" : 0.5,
@@ -217,12 +253,15 @@
       ],
       "opacity-specializations" : [
         {
+          "value" : 0.6
+        },
+        {
           "appearance" : "dark",
           "value" : 0.2
         },
         {
           "appearance" : "tinted",
-          "value" : 0.5
+          "value" : 0.4
         }
       ],
       "shadow" : {

@@ -56,6 +56,8 @@ final class TripSegment {
     var pinAddress: String?
     var latitude: Double?
     var longitude: Double?
+    var commuteMode: String?      // how you get to this event: "walk" / "transit"
+    var commuteSummary: String?   // e.g. "An 8 minute walk from Gare du Nord"
     var isCompleted: Bool
 
     var day: TripDay?
@@ -63,7 +65,7 @@ final class TripSegment {
     init(id: String, order: Int, kindRaw: String, time: String, endTime: String?, title: String,
          summary: String, info: String?, detail: String, ref: String?, seat: String?,
          attachments: [Attachment], link: String?, pinName: String?, pinAddress: String?,
-         latitude: Double?, longitude: Double?) {
+         latitude: Double?, longitude: Double?, commuteMode: String?, commuteSummary: String?) {
         self.id = id
         self.order = order
         self.kindRaw = kindRaw
@@ -81,6 +83,8 @@ final class TripSegment {
         self.pinAddress = pinAddress
         self.latitude = latitude
         self.longitude = longitude
+        self.commuteMode = commuteMode
+        self.commuteSummary = commuteSummary
         self.isCompleted = false
     }
 

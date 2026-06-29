@@ -27,7 +27,8 @@ enum Seeding {
                     attachments: (seg.files ?? []).map { Attachment(name: $0.name, label: $0.label) },
                     link: seg.link,
                     pinName: seg.pin?.name, pinAddress: seg.pin?.address,
-                    latitude: seg.pin?.lat, longitude: seg.pin?.lng
+                    latitude: seg.pin?.lat, longitude: seg.pin?.lng,
+                    commuteMode: seg.commute?.mode, commuteSummary: seg.commute?.summary
                 )
                 segment.day = model
                 context.insert(segment)
@@ -60,10 +61,14 @@ private struct TripFile: Decodable {
         let id, type, time, title, summary, detail: String
         let endTime, info, ref, seat, link: String?
         let files: [FileDTO]?
+        let commute: CommuteDTO?
         let pin: PinDTO?
     }
     struct FileDTO: Decodable {
         let name, label: String
+    }
+    struct CommuteDTO: Decodable {
+        let mode, summary: String
     }
     struct PinDTO: Decodable {
         let name: String, lat: Double, lng: Double, address: String

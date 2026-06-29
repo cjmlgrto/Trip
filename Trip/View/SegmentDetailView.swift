@@ -22,8 +22,8 @@ struct SegmentDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 32) {
                 titleBlock
-                if !segment.detail.isEmpty { notesSection }
                 if segment.coordinate != nil { locationSection }
+                if !segment.detail.isEmpty { notesSection }
                 if !detailRows.isEmpty { detailsSection }
                 actions
             }
@@ -46,7 +46,7 @@ struct SegmentDetailView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(segment.title)
-                    .font(.largeTitle.bold())
+                    .font(.title.bold())
                     .onScrollVisibilityChange { titleOnScreen = $0 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(segment.summary).font(.body)
@@ -80,7 +80,7 @@ struct SegmentDetailView: View {
 
     private var notesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Notes").font(.headline)
+            Text("Notes").font(.headline).foregroundStyle(.secondary)
             Text(segment.detail).font(.body)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -91,15 +91,6 @@ struct SegmentDetailView: View {
 
     private var locationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Group {
-                Text("Location").font(.headline)
-                if let address = segment.pinAddress {
-                    Text(address).font(.body)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, textInset)
-
             if let coordinate = segment.coordinate {
                 Map(initialPosition: .region(MKCoordinateRegion(
                     center: coordinate,
@@ -111,6 +102,13 @@ struct SegmentDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                 .allowsHitTesting(false)
             }
+//            Group {
+//                if let address = segment.pinAddress {
+//                    Text(address).font(.body)
+//                }
+//            }
+//            .frame(maxWidth: .infinity, alignment: .leading)
+//            .padding(.horizontal, textInset)
         }
     }
 
@@ -118,18 +116,18 @@ struct SegmentDetailView: View {
 
     private var detailsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Details").font(.headline)
+            Text("Details").font(.headline).foregroundStyle(.secondary)
                 .padding(.horizontal, textInset)
 
             VStack(spacing: 0) {
                 ForEach(Array(detailRows.enumerated()), id: \.element.id) { index, row in
                     detailRow(row)
                         .padding(.horizontal, textInset)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 16)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background {
                             if index.isMultiple(of: 2) {
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
                                     .fill(Color(.quaternarySystemFill))
                             }
                         }
@@ -143,7 +141,7 @@ struct SegmentDetailView: View {
         switch row {
         case let .fact(label, value):
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(label).font(.body)
+                Text(label).font(.headline)
                 Spacer(minLength: 8)
                 Text(value).font(.body).multilineTextAlignment(.trailing)
             }
@@ -163,7 +161,7 @@ struct SegmentDetailView: View {
 
     private func documentRow(_ label: String, pending: Bool) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text("Document").font(.body)
+            Text("Document").font(.headline)
             Spacer(minLength: 8)
             Label(pending ? "\(label) (pending)" : label, systemImage: "paperclip")
                 .font(.body.weight(.medium))
@@ -181,7 +179,7 @@ struct SegmentDetailView: View {
                 Button {
                     openInMaps(coordinate)
                 } label: {
-                    Text("Open in Maps").fontWeight(.medium).frame(maxWidth: .infinity)
+                    Text("Open in Maps").fontWeight(.semibold).frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glassProminent)
             }
@@ -191,7 +189,7 @@ struct SegmentDetailView: View {
                 Button {
                     openURL(url)
                 } label: {
-                    Text("Manage booking").fontWeight(.medium).frame(maxWidth: .infinity)
+                    Text("Manage booking").fontWeight(.semibold).frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.glass)
             }
@@ -200,11 +198,11 @@ struct SegmentDetailView: View {
             Button {
                 segment.isCompleted.toggle()
             } label: {
-                Text(segment.isCompleted ? "Mark as Not Done" : "Mark as Done")
+                Text(segment.isCompleted ? "Mark as Not Done" : "Mark as Done").fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderless)
-            .padding(.top, 4)
+            .padding(12)
         }
         .controlSize(.large)
         .padding(.horizontal, textInset)

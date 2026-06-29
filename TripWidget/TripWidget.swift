@@ -59,7 +59,7 @@ private struct WidgetLayout {
                 header: .footnote.weight(.semibold),
                 row: RowStyle(title: .caption.weight(.semibold), location: .caption,
                               time: .caption2, showsLocation: true),
-                maxEvents: 1, rowSpacing: 8)
+                maxEvents: 2, rowSpacing: 8)
         }
     }
 }

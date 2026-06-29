@@ -4,19 +4,22 @@ import Combine
 
 // MARK: - The trip — itinerary list (content of the root map sheet)
 //
-// A plain list of day headers and itinerary items. The enclosing NavigationStack
-// (in RootMapView) owns navigation, so rows just push TripSegment values. The
-// "current" item (by device clock) is highlighted; completed items dim.
+// A plain list of day headers and itinerary items. Navigation and the filter /
+// search controls live in RootMapView (the app's top toolbar over the map);
+// this view just receives the filter state and renders. The "current" item (by
+// device clock) is highlighted; completed items dim.
 
 struct TripListView: View {
     @Environment(\.modelContext) private var context
 
     @Query(sort: \TripDay.order) private var days: [TripDay]
 
-    @State private var search = ""
-    @State private var hideCompleted = true
-    @State private var todayOnly = false
-    @State private var hiddenKinds: Set<SegmentKind> = []
+    // Filter state, owned by RootMapView.
+    let hideCompleted: Bool
+    let todayOnly: Bool
+    let hiddenKinds: Set<SegmentKind>
+    @Binding var selection: TripSegment?
+
     @State private var detailLevel: DetailLevel = .full
     @State private var pinchBaseLevel: DetailLevel?
     @State private var now = Date()
@@ -42,10 +45,13 @@ struct TripListView: View {
                             .listRowSeparator(.hidden)
                             .listRowInsets(.init(top: 6, leading: 16, bottom: 6, trailing: 16))
                     }
-                    NavigationLink(value: segment) {
+                    Button {
+                        selection = segment
+                    } label: {
                         SegmentRow(segment: segment, isCurrent: segment.id == currentID,
                                    now: now, detail: detailLevel)
                     }
+                    .buttonStyle(.plain)
                     .listRowSeparator(.hidden)
                     .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -55,7 +61,8 @@ struct TripListView: View {
             }
 
             if sections.isEmpty {
-                ContentUnavailableView.search(text: search)
+                ContentUnavailableView("Nothing to show", systemImage: "calendar",
+                                       description: Text("Adjust the filter to see more."))
             }
         }
         .listStyle(.plain)
@@ -80,36 +87,7 @@ struct TripListView: View {
         .animation(.trip, value: hideCompleted)
         .animation(.trip, value: todayOnly)
         .animation(.trip, value: hiddenKinds)
-        .navigationTitle("Your Trip")
-        .searchable(text: $search, prompt: "Search")
-        .searchToolbarBehavior(.minimize)
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                Menu {
-                    Toggle(isOn: $hideCompleted) {
-                        Label("Hide Completed", systemImage: "checkmark.circle")
-                    }
-                    Toggle(isOn: $todayOnly) {
-                        Label("Today Only", systemImage: "calendar")
-                    }
-                    Section("Categories") {
-                        ForEach(SegmentKind.spectrumOrder, id: \.self) { kind in
-                            Toggle(isOn: visibility(of: kind)) {
-                                Label {
-                                    Text(kind.label)
-                                } icon: {
-                                    Image(uiImage: kind.swatchImage)
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    Label("Filter", systemImage: "line.3.horizontal.decrease")
-                }
-            }
-            ToolbarSpacer(.flexible, placement: .bottomBar)
-            DefaultToolbarItem(kind: .search, placement: .bottomBar)
-        }
+        .navigationBarHidden(true)
         .task {
             Seeding.seedIfNeeded(context)
             WidgetSnapshot.publish(from: context)
@@ -147,34 +125,18 @@ struct TripListView: View {
 
     /// Days with their filtered segments, empty days dropped — computed once.
     private var visibleSections: [DaySection] {
-        let query = self.query
         let today = DateText.dayKey(now)
         return days.compactMap { day in
             if todayOnly && day.date != today { return nil }
-            let segments = day.orderedSegments.filter { matches($0, query: query) }
+            let segments = day.orderedSegments.filter { matches($0) }
             return segments.isEmpty ? nil : DaySection(day: day, segments: segments)
         }
     }
 
-    /// Binding for a category's visibility toggle (on == shown).
-    private func visibility(of kind: SegmentKind) -> Binding<Bool> {
-        Binding(
-            get: { !hiddenKinds.contains(kind) },
-            set: { shown in
-                if shown { hiddenKinds.remove(kind) } else { hiddenKinds.insert(kind) }
-            }
-        )
-    }
-
-    private func matches(_ segment: TripSegment, query: String) -> Bool {
+    private func matches(_ segment: TripSegment) -> Bool {
         if hideCompleted && segment.isCompleted { return false }
         if hiddenKinds.contains(segment.kind) { return false }
-        if !query.isEmpty && !segment.matchText.contains(query) { return false }
         return true
-    }
-
-    private var query: String {
-        search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 
     private struct DaySection: Identifiable {
@@ -185,8 +147,7 @@ struct TripListView: View {
 }
 
 #Preview {
-    NavigationStack {
-        TripListView()
-    }
-    .modelContainer(PreviewData.container)
+    TripListView(hideCompleted: true, todayOnly: false,
+                 hiddenKinds: [], selection: .constant(nil))
+        .modelContainer(PreviewData.container)
 }

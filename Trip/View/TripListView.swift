@@ -42,7 +42,7 @@ struct TripListView: View {
                     if detailLevel == .full, let commute = segment.commuteSummary {
                         CommuteCard(mode: segment.commuteMode ?? "walk", summary: commute)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 6, leading: 24, bottom: 6, trailing: 16))
+                            .listRowInsets(.init(top: 6, leading: 16, bottom: 6, trailing: 16))
                     }
                     NavigationLink(value: segment) {
                         SegmentRow(segment: segment, isCurrent: segment.id == currentID,

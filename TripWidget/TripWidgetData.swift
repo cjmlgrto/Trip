@@ -2,24 +2,32 @@ import Foundation
 
 // MARK: - Widget data
 //
-// The widget runs in its own process and only needs static trip content plus
-// the clock to show the current and next event, so it reads a bundled copy of
-// trip.json directly — no SwiftData, no App Group. (If trip.json changes, copy
-// it into the widget target too.)
+// Self-contained: the widget reads a small snapshot the app publishes into the
+// shared App Group container (see WidgetSnapshot in the app). No SwiftData
+// models, no bundled JSON — a single source of truth lives in the app.
+
+private let appGroupIdentifier = "group.carlos-m.trips"
+private let snapshotFileName = "widget-snapshot.json"
+
+/// Matches the app's `WidgetSnapshotEvent` shape.
+private struct SnapshotEvent: Codable {
+    let id: String
+    let kind: String
+    let title: String
+    let location: String
+    let timeRange: String
+    let start: Date
+    let end: Date?
+}
 
 struct WidgetEvent: Identifiable {
     let id: String
     let kind: String
     let title: String
     let location: String
+    let timeRange: String
     let start: Date
     let end: Date?
-
-    var timeRange: String {
-        let startText = WidgetDate.clock(start)
-        guard let end else { return startText }
-        return "\(startText) to \(WidgetDate.clock(end))"
-    }
 }
 
 /// One event shown in the widget, with its role.
@@ -31,12 +39,24 @@ struct WidgetItem: Identifiable {
 }
 
 enum WidgetTripData {
-    /// All events, sorted by start time. Loaded once.
-    static let events: [WidgetEvent] = load()
+    /// All events from the shared snapshot, sorted by start time.
+    static func events() -> [WidgetEvent] {
+        guard let url = FileManager.default
+                .containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)?
+                .appendingPathComponent(snapshotFileName),
+              let data = try? Data(contentsOf: url),
+              let snapshot = try? JSONDecoder().decode([SnapshotEvent].self, from: data)
+        else { return [] }
+
+        return snapshot
+            .map { WidgetEvent(id: $0.id, kind: $0.kind, title: $0.title,
+                               location: $0.location, timeRange: $0.timeRange,
+                               start: $0.start, end: $0.end) }
+            .sorted { $0.start < $1.start }
+    }
 
     /// The in-progress event (if any) followed by the upcoming events, in order.
-    /// The view shows as many as its family allows.
-    static func lineup(at now: Date) -> [WidgetItem] {
+    static func lineup(at now: Date, from events: [WidgetEvent]) -> [WidgetItem] {
         var items: [WidgetItem] = []
         if let current = events.first(where: { event in
             event.start <= now && now < (event.end ?? event.start.addingTimeInterval(3600))
@@ -54,9 +74,9 @@ enum WidgetTripData {
         return items
     }
 
-    /// Timestamps at which the displayed lineup changes (event starts and ends),
-    /// so the widget timeline refreshes exactly then.
-    static func refreshDates(after now: Date) -> [Date] {
+    /// Timestamps at which the displayed lineup changes, so the timeline
+    /// refreshes exactly then.
+    static func refreshDates(after now: Date, from events: [WidgetEvent]) -> [Date] {
         var dates: Set<Date> = [now]
         for event in events {
             if event.start > now { dates.insert(event.start) }
@@ -65,57 +85,9 @@ enum WidgetTripData {
         return dates.sorted()
     }
 
-    private static func load() -> [WidgetEvent] {
-        guard let url = Bundle.main.url(forResource: "trip", withExtension: "json"),
-              let data = try? Data(contentsOf: url),
-              let file = try? JSONDecoder().decode(TripFile.self, from: data) else {
-            return []
-        }
-        let events = file.trip.days.flatMap { day in
-            day.segments.compactMap { seg -> WidgetEvent? in
-                guard let start = WidgetDate.dateTime(day: day.date, time: seg.time) else { return nil }
-                return WidgetEvent(
-                    id: seg.id, kind: seg.type, title: seg.title, location: seg.summary,
-                    start: start,
-                    end: seg.endTime.flatMap { WidgetDate.dateTime(day: day.date, time: $0) }
-                )
-            }
-        }
-        return events.sorted { $0.start < $1.start }
-    }
-
-    // Decode-only shapes (a subset of trip.json).
-    private struct TripFile: Decodable {
-        let trip: TripDTO
-        struct TripDTO: Decodable { let days: [DayDTO] }
-        struct DayDTO: Decodable { let date: String; let segments: [SegmentDTO] }
-        struct SegmentDTO: Decodable {
-            let id, type, time, title, summary: String
-            let endTime: String?
-        }
-    }
-}
-
-// MARK: - Date helpers
-
-enum WidgetDate {
-    static func clock(_ date: Date) -> String { clockFormatter.string(from: date) }
-
-    /// "Sunday, Jun 28" — the widget's day header.
+    /// "Sunday, Jun 28" for the widget header.
     static func longDate(_ date: Date) -> String { longFormatter.string(from: date) }
 
-    static func dateTime(day: String, time: String) -> Date? {
-        ymdhm.date(from: "\(day) \(time)")
-    }
-
-    private static let ymdhm: DateFormatter = {
-        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
-        f.dateFormat = "yyyy-MM-dd HH:mm"; return f
-    }()
-    private static let clockFormatter: DateFormatter = {
-        let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
-        f.dateFormat = "h:mm a"; return f
-    }()
     private static let longFormatter: DateFormatter = {
         let f = DateFormatter(); f.dateFormat = "EEEE, MMM d"; return f
     }()

@@ -109,7 +109,10 @@ struct TripListView: View {
             ToolbarSpacer(.flexible, placement: .bottomBar)
             DefaultToolbarItem(kind: .search, placement: .bottomBar)
         }
-        .task { Seeding.seedIfNeeded(context) }
+        .task {
+            Seeding.seedIfNeeded(context)
+            WidgetSnapshot.publish(from: context)
+        }
         .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
     }
 

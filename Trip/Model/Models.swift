@@ -2,6 +2,14 @@ import Foundation
 import SwiftData
 import CoreLocation
 
+// MARK: - App Group
+//
+// Shared container identifier used by both the app and the widget so they read
+// and write the same SwiftData store.
+enum AppGroup {
+    static let identifier = "group.carlos-m.trips"
+}
+
 // MARK: - Domain models (SwiftData)
 //
 // The trip is seeded once from the bundled JSON (see Seeding.swift), then these

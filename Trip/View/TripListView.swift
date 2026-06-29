@@ -14,7 +14,7 @@ struct TripListView: View {
     @Query(sort: \TripDay.order) private var days: [TripDay]
 
     @State private var search = ""
-    @State private var hideCompleted = false
+    @State private var hideCompleted = true
     @State private var todayOnly = false
     @State private var hiddenKinds: Set<SegmentKind> = []
     @State private var detailLevel: DetailLevel = .full
@@ -85,6 +85,7 @@ struct TripListView: View {
         .navigationTitle("Your Trip")
         .navigationDestination(for: TripSegment.self) { SegmentDetailView(segment: $0) }
         .searchable(text: $search, prompt: "Search")
+        .searchToolbarBehavior(.minimize)
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 Menu {
@@ -106,9 +107,7 @@ struct TripListView: View {
                         }
                     }
                 } label: {
-                    Label("Filter", systemImage: isFiltering
-                          ? "line.3.horizontal.decrease.circle.fill"
-                          : "line.3.horizontal.decrease")
+                    Label("Filter", systemImage: "line.3.horizontal.decrease")
                 }
             }
             ToolbarSpacer(.flexible, placement: .bottomBar)
@@ -159,8 +158,6 @@ struct TripListView: View {
             return segments.isEmpty ? nil : DaySection(day: day, segments: segments)
         }
     }
-
-    private var isFiltering: Bool { hideCompleted || todayOnly || !hiddenKinds.isEmpty }
 
     /// Binding for a category's visibility toggle (on == shown).
     private func visibility(of kind: SegmentKind) -> Binding<Bool> {

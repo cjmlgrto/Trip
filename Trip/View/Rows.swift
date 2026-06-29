@@ -158,7 +158,7 @@ struct SegmentRow: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .center, spacing: 12) {
             Capsule()
                 .fill(indicatorStyle)
                 .frame(width: 4)

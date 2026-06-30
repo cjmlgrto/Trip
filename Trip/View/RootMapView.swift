@@ -20,8 +20,10 @@ struct RootMapView: View {
 
     // Filtering lives at the app level (the map's toolbar), shared into the list.
     @State private var hideCompleted = true
-    @State private var todayOnly = false
+    @State private var hideCommutes = false
     @State private var hiddenKinds: Set<SegmentKind> = []
+    // The day selected in the calendar bar drives both the list and the map.
+    @State private var selectedDay: String?
 
     // User location, for the blue dot and the re-center control.
     @State private var location = LocationProvider()
@@ -56,7 +58,8 @@ struct RootMapView: View {
                 ToolbarItem(placement: .topBarTrailing) { filterMenu }
             }
             .sheet(isPresented: .constant(true)) {
-                TripListView(hideCompleted: hideCompleted, todayOnly: todayOnly,
+                TripListView(hideCompleted: hideCompleted, hideCommutes: hideCommutes,
+                             selectedDay: $selectedDay,
                              hiddenKinds: hiddenKinds, selection: $selected)
                     .presentationDetents([.medium, .large], selection: $detent)
                     .presentationBackgroundInteraction(.enabled(upThrough: .medium))
@@ -82,7 +85,7 @@ struct RootMapView: View {
         }
         // Keep the map framed on what the filter leaves visible.
         .onChange(of: hideCompleted) { reframeForFilter() }
-        .onChange(of: todayOnly) { reframeForFilter() }
+        .onChange(of: selectedDay) { reframeForFilter() }
         .onChange(of: hiddenKinds) { reframeForFilter() }
     }
 
@@ -155,8 +158,8 @@ struct RootMapView: View {
             Toggle(isOn: $hideCompleted) {
                 Label("Hide Completed", systemImage: "checkmark.circle")
             }
-            Toggle(isOn: $todayOnly) {
-                Label("Today Only", systemImage: "calendar")
+            Toggle(isOn: $hideCommutes) {
+                Label("Hide Commutes", systemImage: "figure.walk")
             }
             Section("Categories") {
                 ForEach(SegmentKind.spectrumOrder, id: \.self) { kind in
@@ -198,7 +201,7 @@ struct RootMapView: View {
     private func matchesFilter(_ segment: TripSegment) -> Bool {
         if hideCompleted && segment.isCompleted { return false }
         if hiddenKinds.contains(segment.kind) { return false }
-        if todayOnly && segment.day?.date != DateText.dayKey(Date()) { return false }
+        if let selectedDay, segment.day?.date != selectedDay { return false }
         return true
     }
 
@@ -222,16 +225,16 @@ struct RootMapView: View {
         }
     }
 
-    /// Default framing: the current day's pins, else all pins.
+    /// Default framing: the selected day's pins, else all pins.
     private func defaultCamera() -> MapCameraPosition {
-        if let region = currentDayRegion() { return .region(region) }
+        if let region = selectedDayRegion() { return .region(region) }
         return .automatic
     }
 
-    private func currentDayRegion() -> MKCoordinateRegion? {
-        let today = DateText.dayKey(Date())
+    private func selectedDayRegion() -> MKCoordinateRegion? {
+        let key = selectedDay ?? DateText.dayKey(Date())
         let coordinates = segments
-            .filter { $0.day?.date == today }
+            .filter { $0.day?.date == key }
             .compactMap(\.coordinate)
         guard !coordinates.isEmpty else { return nil }
         return region(fitting: coordinates)

@@ -1,4 +1,5 @@
 import SwiftData
+import Foundation
 
 // MARK: - Preview support
 //
@@ -14,4 +15,10 @@ enum PreviewData {
         Seeding.seedIfNeeded(container.mainContext)
         return container
     }()
+
+    /// The seeded trip days, in itinerary order — handy for component previews.
+    static var days: [TripDay] {
+        let descriptor = FetchDescriptor<TripDay>(sortBy: [SortDescriptor(\.order)])
+        return (try? container.mainContext.fetch(descriptor)) ?? []
+    }
 }

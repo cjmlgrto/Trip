@@ -161,15 +161,16 @@
             "link": "https://strakers.london/"
           },
           {
-            "id": "beers-friend",
+            "id": "beers-soho",
             "type": "meal",
             "time": "17:00",
             "endTime": "19:30",
-            "title": "Beers with a friend",
-            "summary": "London",
+            "title": "Beers in Soho",
+            "summary": "Soho, West End",
             "info": "Around 5pm · home by 8pm",
-            "detail": "Meet your friend for a few beers around 5pm. Keep it relaxed and leave enough time to get back, since you want to be at the hotel by 8pm. Confirm the spot with them, then head back to Bloomsbury after.",
-            "pin": { "name": "London", "lat": 51.5264, "lng": -0.1294, "address": "London, UK" }
+            "commute": { "mode": "transit", "summary": "Northern line to Tottenham Court Road, then a short walk, about 15 minutes" },
+            "detail": "Meet your friend for a few beers in Soho, the heart of the West End for pubs and bars. From the British Library area, the Northern line to Tottenham Court Road drops you right at the edge of Soho. Old Compton Street, Dean Street and Greek Street are full of options. Keep it relaxed and leave enough time to get back, since you want to be at the hotel by 8pm.",
+            "pin": { "name": "Soho, London", "lat": 51.5137, "lng": -0.1318, "address": "Soho, London W1, UK" }
           },
           {
             "id": "back-to-hotel",
@@ -235,16 +236,29 @@
             "link": "https://www.booking.com"
           },
           {
-            "id": "paris-evening",
+            "id": "mouffetard-segar",
+            "type": "meal",
+            "time": "18:15",
+            "endTime": "20:00",
+            "title": "Rue Mouffetard and Rotisserie Segar",
+            "summary": "Latin Quarter, 5th",
+            "info": "Roast chicken to go, evening service to 19h30",
+            "commute": { "mode": "transit", "summary": "Metro from the hotel to the 5th, about 25 minutes" },
+            "detail": "Drop your bags, then head straight out to the Latin Quarter for an easy first night. Rue Mouffetard is one of the oldest, liveliest market streets in Paris, sloping down past food shops and little squares. Pick up a whole roast chicken and sides from Rotisserie Segar at 111 rue Mouffetard, a much-loved spot famous for its chicken and Cesar-salad sandwich. Their evening service runs 16h30 to 19h30, so aim to arrive by around 18:30 to be safe, since it can sell out. They are takeaway, so eat it as a picnic nearby.",
+            "pin": { "name": "Rotisserie Segar", "lat": 48.8407, "lng": 2.3498, "address": "111 Rue Mouffetard, 75005 Paris, France", "place_id": "ChIJmdE7F5Bx5kcR3GxZniz1XGw" },
+            "link": "https://maps.google.com/?cid=7808510119685271260"
+          },
+          {
+            "id": "arenes-lutece",
             "type": "activity",
-            "time": "19:30",
-            "endTime": "22:00",
-            "title": "First evening in Paris",
-            "summary": "Canal Saint Martin",
-            "info": "Wine and small plates",
-            "commute": { "mode": "walk", "summary": "About 15 minutes on foot" },
-            "detail": "Drop your bags and explore. If you still have energy, the Louvre stays open late on Wednesdays until 9:45pm. Otherwise head to Canal Saint Martin, about 15 minutes on foot, for natural wine and small plates.",
-            "pin": { "name": "Canal Saint Martin", "lat": 48.8709, "lng": 2.3674, "address": "Quai de Valmy, 75010 Paris, France" }
+            "time": "20:00",
+            "endTime": "21:30",
+            "title": "Picnic at the Arenes de Lutece",
+            "summary": "5th arrondissement",
+            "info": "Hidden Roman amphitheatre, free",
+            "commute": { "mode": "walk", "summary": "About a 7 minute walk from rue Mouffetard" },
+            "detail": "Carry your chicken a few minutes north to the Arenes de Lutece, a 1st-century Roman amphitheatre tucked between apartment blocks and open until midnight. Locals play boules and football on the old arena floor while you eat on the stone terraces. One of the quietest, most atmospheric corners of Paris for a first-night picnic. If you would rather greenery, the Jardin des Plantes is a short walk further south.",
+            "pin": { "name": "Arenes de Lutece", "lat": 48.8451, "lng": 2.3528, "address": "49 Rue Monge, 75005 Paris, France", "place_id": "ChIJEU7r8_lx5kcRgylm7D8Avm4" }
           }
         ]
       },
@@ -277,30 +291,54 @@
             "link": "https://www.ticketlouvre.fr/"
           },
           {
+            "id": "galerie-vivienne",
+            "type": "activity",
+            "time": "12:00",
+            "endTime": "12:30",
+            "title": "Galerie Vivienne",
+            "summary": "Covered passage, 2nd",
+            "info": "1823 arcade, on the way north",
+            "commute": { "mode": "walk", "summary": "About 8 minutes from the Louvre" },
+            "detail": "On your way north from the Louvre, cut through Galerie Vivienne, one of the most beautiful of the 19th-century covered passages: a vaulted glass roof, ornate mosaic floors and old bookshops and boutiques. A short, lovely wander before you carry on to lunch.",
+            "pin": { "name": "Galerie Vivienne", "lat": 48.8664, "lng": 2.3395, "address": "4 Rue des Petits Champs, 75002 Paris, France", "place_id": "ChIJuwjIqyRu5kcRP4GCzHGeUSk" }
+          },
+          {
             "id": "dents-de-loup",
             "type": "meal",
-            "time": "12:30",
-            "endTime": "14:00",
+            "time": "12:45",
+            "endTime": "14:15",
             "title": "Lunch at Dents de Loup",
             "summary": "9th arrondissement",
             "info": "Cuisine served 12h to 14h30, Tue to Sat",
-            "commute": { "mode": "transit", "summary": "Metro 7 from Palais Royal to Cadet, about 15 minutes" },
-            "detail": "A boucherie-charcuterie-comptoir in the 9th doing exceptional meat and charcuterie with a serious wine list. The boudin noir and the terrines come highly praised. Cuisine is only served 12h to 14h30, Tuesday to Saturday, so arrive by around 12:30 to be safe; it gets busy and does not take long lunches. From the Louvre take metro line 7 from Palais Royal to Cadet, then a short walk. Budget around 30 to 45 euros with a glass of wine.",
+            "commute": { "mode": "transit", "summary": "Metro 7 from Bourse or Pyramides to Cadet, about 12 minutes" },
+            "detail": "A boucherie-charcuterie-comptoir in the 9th doing exceptional meat and charcuterie with a serious wine list. The boudin noir and the terrines come highly praised. Cuisine is only served 12h to 14h30, Tuesday to Saturday, so do not arrive much later than 12:45; it gets busy and does not take long lunches. Budget around 30 to 45 euros with a glass of wine.",
             "pin": { "name": "Dents de Loup", "lat": 48.8815, "lng": 2.3464, "address": "75 Rue Marguerite de Rochechouart, 75009 Paris, France", "place_id": "ChIJ22vCv35v5kcRG2cAJ38SGNU" },
             "link": "https://dentsdeloup.net/"
           },
           {
-            "id": "marais-notredame",
+            "id": "vie-romantique",
             "type": "activity",
-            "time": "15:00",
+            "time": "14:30",
+            "endTime": "16:00",
+            "title": "Musee de la Vie Romantique",
+            "summary": "9th, near the restaurant",
+            "info": "Free, with a garden cafe",
+            "commute": { "mode": "walk", "summary": "About a 10 minute walk from the restaurant" },
+            "detail": "A short walk from lunch, this little museum in George Sand's old neighbourhood sits at the end of a tree-lined alley with a cobbled courtyard and rose garden. Entry to the collection is free, and the garden cafe is a lovely place to slow down with a coffee. A calm, beautiful counterpoint before the climb to Montmartre.",
+            "pin": { "name": "Musee de la Vie Romantique", "lat": 48.8814, "lng": 2.3336, "address": "16 Rue Chaptal, 75009 Paris, France", "place_id": "ChIJg4YBxUhu5kcRoIeyo9blO00" },
+            "link": "https://www.museevieromantique.paris.fr/"
+          },
+          {
+            "id": "square-louise-michel",
+            "type": "activity",
+            "time": "16:15",
             "endTime": "17:30",
-            "title": "Le Marais and Notre Dame",
-            "summary": "Ile de la Cite",
-            "info": "Reserve a free Notre Dame slot",
-            "commute": { "mode": "transit", "summary": "Metro south from the 9th to the Marais, about 20 minutes" },
-            "detail": "After lunch, head south to the Marais, with its galleries and the falafel spots on Rue des Rosiers, then over to the Ile de la Cite. Notre Dame reopened in December 2024. Entry is free but reserve a timed slot to skip the queue.",
-            "pin": { "name": "Cathedrale Notre Dame de Paris", "lat": 48.8530, "lng": 2.3499, "address": "6 Parvis Notre-Dame, 75004 Paris, France" },
-            "link": "https://www.notredamedeparis.fr/en/"
+            "title": "Climb to Sacre Coeur via Square Louise Michel",
+            "summary": "Montmartre",
+            "info": "Best free view in Paris",
+            "commute": { "mode": "transit", "summary": "Metro 12 to Abbesses or Pigalle, then a short walk uphill" },
+            "detail": "Approach Montmartre from below through Square Louise Michel, the green terraced slope that leads up to Sacre Coeur. Climb the steps (or take the funicular) for the sweeping view back over the city, then explore the basilica, which is free, and the artists on Place du Tertre just behind.",
+            "pin": { "name": "Square Louise Michel", "lat": 48.8850, "lng": 2.3434, "address": "Pl. Saint-Pierre, 75018 Paris, France", "place_id": "ChIJGx56IUNu5kcRV27fexfJ3zI" }
           },
           {
             "id": "montmartre",
@@ -310,8 +348,8 @@
             "title": "Sunset in Montmartre",
             "summary": "Sacre Coeur",
             "info": "Have your last Paris dinner up here",
-            "commute": { "mode": "transit", "summary": "Take the metro up the hill" },
-            "detail": "Take the metro up to Montmartre for Sacre Coeur, which is free, and the street artists on Place du Tertre. Have a terrace dinner with city views at dusk, around 45 to 65 euros.",
+            "commute": { "mode": "walk", "summary": "Already up the hill, a short stroll to Place du Tertre" },
+            "detail": "Linger as the light goes gold. Wander the quiet streets behind the basilica, then settle in for your last Paris dinner on a terrace with city views at dusk, around 45 to 65 euros.",
             "pin": { "name": "Basilique du Sacre Coeur", "lat": 48.8867, "lng": 2.3431, "address": "35 Rue du Chevalier de la Barre, 75018 Paris, France" }
           }
         ]

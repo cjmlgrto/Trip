@@ -126,12 +126,6 @@ enum DateText {
         return clock.string(from: date)
     }
 
-    /// "Sunday, Jun 28" — the day-header title.
-    static func longDate(_ day: String) -> String {
-        guard let date = ymd.date(from: day) else { return day }
-        return longDay.string(from: date)
-    }
-
     /// Combines a day + "HH:mm" time into a local Date, for Now/current logic.
     static func dateTime(day: String, time: String) -> Date? {
         guard !time.isEmpty else { return ymd.date(from: day) }
@@ -141,6 +135,11 @@ enum DateText {
     /// "yyyy-MM-dd" key for a date, to compare against a day's `date`.
     static func dayKey(_ date: Date) -> String {
         ymd.string(from: date)
+    }
+
+    /// Parse a "yyyy-MM-dd" day key back into a Date (midnight, POSIX).
+    static func day(_ key: String) -> Date? {
+        ymd.date(from: key)
     }
 
     private static let ymd: DateFormatter = {
@@ -158,8 +157,5 @@ enum DateText {
     private static let clock: DateFormatter = {
         let f = DateFormatter(); f.locale = .init(identifier: "en_US_POSIX")
         f.dateFormat = "h:mm a"; return f
-    }()
-    private static let longDay: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "EEEE, MMM d"; return f
     }()
 }

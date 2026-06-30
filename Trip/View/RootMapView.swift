@@ -61,6 +61,10 @@ struct RootMapView: View {
         .onChange(of: segments.count) {
             if selected == nil { withAnimation(.smooth) { camera = defaultCamera() } }
         }
+        // Keep the map framed on what the filter leaves visible.
+        .onChange(of: hideCompleted) { reframeForFilter() }
+        .onChange(of: todayOnly) { reframeForFilter() }
+        .onChange(of: hiddenKinds) { reframeForFilter() }
     }
 
     // MARK: Detail sheet (over the list, closed with an X)
@@ -122,10 +126,19 @@ struct RootMapView: View {
         return selected
     }
 
-    /// Only the focused pin while viewing a located detail; otherwise all pins.
+    /// Only the focused pin while viewing a located detail; otherwise every
+    /// located pin that passes the active filter — kept in sync with the list.
     private var pins: [TripSegment] {
         if let focused { return [focused] }
-        return segments.filter { $0.coordinate != nil }
+        return segments.filter { $0.coordinate != nil && matchesFilter($0) }
+    }
+
+    /// The same predicate the list applies, so the map and list always agree.
+    private func matchesFilter(_ segment: TripSegment) -> Bool {
+        if hideCompleted && segment.isCompleted { return false }
+        if hiddenKinds.contains(segment.kind) { return false }
+        if todayOnly && segment.day?.date != DateText.dayKey(Date()) { return false }
+        return true
     }
 
     private func focusMap() {
@@ -135,6 +148,16 @@ struct RootMapView: View {
             } else {
                 camera = defaultCamera()
             }
+        }
+    }
+
+    /// Reframe to fit the pins the filter currently leaves visible. Skipped
+    /// while a detail is focused (the detail owns the camera then).
+    private func reframeForFilter() {
+        guard selected == nil else { return }
+        let coordinates = pins.compactMap(\.coordinate)
+        withAnimation(.smooth) {
+            camera = coordinates.isEmpty ? defaultCamera() : .region(region(fitting: coordinates))
         }
     }
 

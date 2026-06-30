@@ -38,15 +38,6 @@ struct TripListView: View {
         let segments = visibleSegments
 
         return List {
-            // The selected day's one-line summary, in place of the old header.
-            if let day = selectedDayModel {
-                Text(day.label)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.init(top: 16, leading: 16, bottom: 4, trailing: 16))
-            }
-
             ForEach(segments) { segment in
                 if detailLevel == .full, let commute = segment.commuteSummary {
                     CommuteCard(mode: segment.commuteMode ?? "walk", summary: commute)

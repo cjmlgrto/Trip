@@ -42,10 +42,7 @@ struct WeekCalendarBar: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: 76)
         }
-        .padding(.top, 16)
-        // No solid fill — a soft material edge lets the itinerary blur softly as
-        // it scrolls underneath.
-        .background(.bar)
+        .padding(.top, 24)
         .onAppear { ensureSelection() }
         .onChange(of: days.map(\.date)) { ensureSelection() }
         .onChange(of: selectedDay) { syncWeekIndex() }

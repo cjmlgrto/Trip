@@ -42,9 +42,10 @@ struct WeekCalendarBar: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: 76)
         }
-        .padding(.top, 8)
-        .background(Color(.systemBackground))
-        .overlay(alignment: .bottom) { Divider() }
+        .padding(.top, 16)
+        // No solid fill — a soft material edge lets the itinerary blur softly as
+        // it scrolls underneath.
+        .background(.bar)
         .onAppear { ensureSelection() }
         .onChange(of: days.map(\.date)) { ensureSelection() }
         .onChange(of: selectedDay) { syncWeekIndex() }
@@ -57,14 +58,14 @@ struct WeekCalendarBar: View {
         let weekend = column >= 5
         return VStack(spacing: 6) {
             Text(weekdayLetters[column])
-                .font(.subheadline)
+                .font(.footnote)
                 .foregroundStyle(letterColor(isTripDay: day.isTripDay, weekend: weekend))
             ZStack {
                 if selected {
                     Circle().fill(.red).frame(width: 40, height: 40)
                 }
                 Text("\(day.number)")
-                    .font(.title2)
+                    .font(.title3)
                     .fontWeight(selected ? .semibold : .regular)
                     .foregroundStyle(numberColor(day, weekend: weekend, selected: selected))
             }

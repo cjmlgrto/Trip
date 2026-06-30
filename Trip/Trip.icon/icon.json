@@ -69,8 +69,8 @@
       "shadow-specializations" : [
         {
           "value" : {
-            "kind" : "layer-color",
-            "opacity" : 4
+            "kind" : "neutral",
+            "opacity" : 2.4
           }
         },
         {

@@ -23,6 +23,7 @@ struct TripListView: View {
     @State private var detailLevel: DetailLevel = .full
     @State private var pinchBaseLevel: DetailLevel?
     @State private var now = Date()
+    @State private var showingEdit = false
 
     var body: some View {
         itinerary
@@ -64,6 +65,19 @@ struct TripListView: View {
                 ContentUnavailableView("Nothing to show", systemImage: "calendar",
                                        description: Text("Adjust the filter to see more."))
             }
+
+            // Edit the trip — same quiet text-action treatment as the detail
+            // screen's "Mark as Done" button.
+            Button {
+                showingEdit = true
+            } label: {
+                Text("Edit Trip").fontWeight(.semibold).frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderless)
+            .controlSize(.large)
+            .padding(12)
+            .listRowSeparator(.hidden)
+            .listRowInsets(.init(top: 16, leading: 16, bottom: 24, trailing: 16))
         }
         .listStyle(.plain)
         .simultaneousGesture(
@@ -88,6 +102,9 @@ struct TripListView: View {
         .animation(.trip, value: todayOnly)
         .animation(.trip, value: hiddenKinds)
         .navigationBarHidden(true)
+        .sheet(isPresented: $showingEdit) {
+            EditTripView()
+        }
         .task {
             Seeding.seedIfNeeded(context)
             WidgetSnapshot.publish(from: context)

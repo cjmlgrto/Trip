@@ -133,7 +133,9 @@ struct CommuteCard: View {
     }
 
     var body: some View {
-        HStack(spacing: 12) {
+        // First-baseline alignment keeps the icon on the topmost line's baseline
+        // when the summary wraps to two lines, instead of centering on the block.
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
             Image(systemName: symbol)
                 .font(.footnote)
                 .frame(width: 4)            // sits in the indicator rail's column
@@ -239,6 +241,17 @@ struct SegmentRow: View {
             }
         }
     }
+}
+
+#Preview("Commute cards") {
+    List {
+        CommuteCard(mode: "walk", summary: "An 8 minute walk from Gare du Nord")
+            .listRowSeparator(.hidden)
+        CommuteCard(mode: "transit",
+                    summary: "Take the Piccadilly line direct from Heathrow to King's Cross St Pancras, about 50 to 60 minutes with no changes")
+            .listRowSeparator(.hidden)
+    }
+    .listStyle(.plain)
 }
 
 #Preview("Current row progress") {

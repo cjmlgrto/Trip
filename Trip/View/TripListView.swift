@@ -78,6 +78,7 @@ struct TripListView: View {
             .listRowInsets(.init(top: 16, leading: 16, bottom: 24, trailing: 16))
         }
         .listStyle(.plain)
+        .contentMargins(.top, 24, for: .scrollContent)
         .simultaneousGesture(
             MagnifyGesture()
                 .onChanged { value in

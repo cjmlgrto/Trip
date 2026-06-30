@@ -16,7 +16,7 @@ struct TripListView: View {
 
     // Filter state, owned by RootMapView.
     let hideCompleted: Bool
-    let todayOnly: Bool
+    @Binding var selectedDay: String?
     let hiddenKinds: Set<SegmentKind>
     @Binding var selection: TripSegment?
 
@@ -26,44 +26,50 @@ struct TripListView: View {
     @State private var showingEdit = false
 
     var body: some View {
-        itinerary
+        VStack(spacing: 0) {
+            WeekCalendarBar(days: days, selectedDay: $selectedDay)
+            itinerary
+        }
     }
 
     private var itinerary: some View {
         // Computed once per render — not once per row.
         let currentID = currentSegmentID
-        let sections = visibleSections
+        let segments = visibleSegments
 
         return List {
-            ForEach(sections) { section in
-                DayHeaderView(title: DateText.longDate(section.day.date), summary: section.day.label)
+            // The selected day's one-line summary, in place of the old header.
+            if let day = selectedDayModel {
+                Text(day.label)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                     .listRowSeparator(.hidden)
-                    .listRowInsets(.init(top: 24, leading: 16, bottom: 8, trailing: 16))
+                    .listRowInsets(.init(top: 16, leading: 16, bottom: 4, trailing: 16))
+            }
 
-                ForEach(section.segments) { segment in
-                    if detailLevel == .full, let commute = segment.commuteSummary {
-                        CommuteCard(mode: segment.commuteMode ?? "walk", summary: commute)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(.init(top: 6, leading: 16, bottom: 6, trailing: 16))
-                    }
-                    Button {
-                        selection = segment
-                    } label: {
-                        SegmentRow(segment: segment, isCurrent: segment.id == currentID,
-                                   now: now, detail: detailLevel)
-                    }
-                    .buttonStyle(.plain)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        completeButton(for: segment)
-                    }
+            ForEach(segments) { segment in
+                if detailLevel == .full, let commute = segment.commuteSummary {
+                    CommuteCard(mode: segment.commuteMode ?? "walk", summary: commute)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.init(top: 6, leading: 16, bottom: 6, trailing: 16))
+                }
+                Button {
+                    selection = segment
+                } label: {
+                    SegmentRow(segment: segment, isCurrent: segment.id == currentID,
+                               now: now, detail: detailLevel)
+                }
+                .buttonStyle(.plain)
+                .listRowSeparator(.hidden)
+                .listRowInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    completeButton(for: segment)
                 }
             }
 
-            if sections.isEmpty {
-                ContentUnavailableView("Nothing to show", systemImage: "calendar",
-                                       description: Text("Adjust the filter to see more."))
+            if segments.isEmpty {
+                ContentUnavailableView("Nothing planned", systemImage: "calendar",
+                                       description: Text("No events for this day, or the filter hides them all."))
             }
 
             // Edit the trip — same quiet text-action treatment as the detail
@@ -99,7 +105,7 @@ struct TripListView: View {
                 .onEnded { _ in pinchBaseLevel = nil }
         )
         .animation(.trip, value: hideCompleted)
-        .animation(.trip, value: todayOnly)
+        .animation(.trip, value: selectedDay)
         .animation(.trip, value: hiddenKinds)
         .navigationBarHidden(true)
         .sheet(isPresented: $showingEdit) {
@@ -140,14 +146,14 @@ struct TripListView: View {
 
     // MARK: - Filtering
 
-    /// Days with their filtered segments, empty days dropped — computed once.
-    private var visibleSections: [DaySection] {
-        let today = DateText.dayKey(now)
-        return days.compactMap { day in
-            if todayOnly && day.date != today { return nil }
-            let segments = day.orderedSegments.filter { matches($0) }
-            return segments.isEmpty ? nil : DaySection(day: day, segments: segments)
-        }
+    /// The TripDay matching the calendar selection.
+    private var selectedDayModel: TripDay? {
+        days.first { $0.date == selectedDay }
+    }
+
+    /// The selected day's segments, in order, after the active filter.
+    private var visibleSegments: [TripSegment] {
+        (selectedDayModel?.orderedSegments ?? []).filter { matches($0) }
     }
 
     private func matches(_ segment: TripSegment) -> Bool {
@@ -155,16 +161,11 @@ struct TripListView: View {
         if hiddenKinds.contains(segment.kind) { return false }
         return true
     }
-
-    private struct DaySection: Identifiable {
-        let day: TripDay
-        let segments: [TripSegment]
-        var id: String { day.date }
-    }
 }
 
 #Preview {
-    TripListView(hideCompleted: true, todayOnly: false,
-                 hiddenKinds: [], selection: .constant(nil))
+    @Previewable @State var day: String? = "2026-06-30"
+    return TripListView(hideCompleted: true, selectedDay: $day,
+                        hiddenKinds: [], selection: .constant(nil))
         .modelContainer(PreviewData.container)
 }

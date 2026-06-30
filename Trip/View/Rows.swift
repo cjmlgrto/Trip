@@ -147,23 +147,6 @@ struct CommuteCard: View {
     }
 }
 
-/// The big day header: "Sunday, Jun 28" over a one-line summary.
-struct DayHeaderView: View {
-    let title: String
-    let summary: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.title2)
-                .fontWeight(.bold)
-            Text(summary)
-                .font(.body)
-                .foregroundStyle(.secondary)
-        }
-    }
-}
-
 /// A single itinerary item: leading indicator rail, title/subtitle/optional
 /// info, and a trailing time.
 struct SegmentRow: View {

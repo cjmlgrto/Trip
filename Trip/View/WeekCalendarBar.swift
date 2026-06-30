@@ -60,7 +60,7 @@ struct WeekCalendarBar: View {
         return VStack(spacing: 6) {
             Text(weekdayLetters[column])
                 .font(.footnote)
-                .foregroundStyle(letterColor(isTripDay: day.isTripDay, weekend: weekend))
+                .foregroundStyle(letterColor(isTripDay: day.isTripDay))
             ZStack {
                 if selected {
                     Circle().fill(.red).frame(width: 40, height: 40)
@@ -83,16 +83,15 @@ struct WeekCalendarBar: View {
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
-    private func letterColor(isTripDay: Bool, weekend: Bool) -> Color {
-        if !isTripDay { return Color(.quaternaryLabel) }
-        return weekend ? Color(.tertiaryLabel) : Color(.secondaryLabel)
+    private func letterColor(isTripDay: Bool) -> Color {
+        isTripDay ? Color(.secondaryLabel) : Color(.quaternaryLabel)
     }
 
     private func numberColor(_ day: DayInfo, weekend: Bool, selected: Bool) -> Color {
         if selected { return .white }
         if !day.isTripDay { return Color(.quaternaryLabel) }
         if day.isToday { return .red }
-        return weekend ? Color(.tertiaryLabel) : Color(.label)
+        return weekend ? Color(.secondaryLabel) : Color(.label)
     }
 
     // MARK: Weeks model

@@ -43,6 +43,10 @@ struct WeekCalendarBar: View {
             .frame(height: 76)
         }
         .padding(.top, 24)
+        // Soft hairline separating the picker from the scrolling itinerary.
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(.quaternary).frame(height: 1)
+        }
         .onAppear { ensureSelection() }
         .onChange(of: days.map(\.date)) { ensureSelection() }
         .onChange(of: selectedDay) { syncWeekIndex() }

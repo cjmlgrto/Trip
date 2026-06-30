@@ -20,6 +20,7 @@ struct RootMapView: View {
 
     // Filtering lives at the app level (the map's toolbar), shared into the list.
     @State private var hideCompleted = true
+    @State private var hideCommutes = false
     @State private var hiddenKinds: Set<SegmentKind> = []
     // The day selected in the calendar bar drives both the list and the map.
     @State private var selectedDay: String?
@@ -57,7 +58,8 @@ struct RootMapView: View {
                 ToolbarItem(placement: .topBarTrailing) { filterMenu }
             }
             .sheet(isPresented: .constant(true)) {
-                TripListView(hideCompleted: hideCompleted, selectedDay: $selectedDay,
+                TripListView(hideCompleted: hideCompleted, hideCommutes: hideCommutes,
+                             selectedDay: $selectedDay,
                              hiddenKinds: hiddenKinds, selection: $selected)
                     .presentationDetents([.medium, .large], selection: $detent)
                     .presentationBackgroundInteraction(.enabled(upThrough: .medium))
@@ -155,6 +157,9 @@ struct RootMapView: View {
         Menu {
             Toggle(isOn: $hideCompleted) {
                 Label("Hide Completed", systemImage: "checkmark.circle")
+            }
+            Toggle(isOn: $hideCommutes) {
+                Label("Hide Commutes", systemImage: "figure.walk")
             }
             Section("Categories") {
                 ForEach(SegmentKind.spectrumOrder, id: \.self) { kind in

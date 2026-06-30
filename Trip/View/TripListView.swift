@@ -16,6 +16,7 @@ struct TripListView: View {
 
     // Filter state, owned by RootMapView.
     let hideCompleted: Bool
+    let hideCommutes: Bool
     @Binding var selectedDay: String?
     let hiddenKinds: Set<SegmentKind>
     @Binding var selection: TripSegment?
@@ -39,7 +40,7 @@ struct TripListView: View {
 
         return List {
             ForEach(segments) { segment in
-                if detailLevel == .full, let commute = segment.commuteSummary {
+                if detailLevel == .full, !hideCommutes, let commute = segment.commuteSummary {
                     CommuteCard(mode: segment.commuteMode ?? "walk", summary: commute)
                         .listRowSeparator(.hidden)
                         .listRowInsets(.init(top: 6, leading: 16, bottom: 6, trailing: 16))
@@ -96,6 +97,7 @@ struct TripListView: View {
                 .onEnded { _ in pinchBaseLevel = nil }
         )
         .animation(.trip, value: hideCompleted)
+        .animation(.trip, value: hideCommutes)
         .animation(.trip, value: selectedDay)
         .animation(.trip, value: hiddenKinds)
         .navigationBarHidden(true)
@@ -156,7 +158,7 @@ struct TripListView: View {
 
 #Preview {
     @Previewable @State var day: String? = "2026-06-30"
-    return TripListView(hideCompleted: true, selectedDay: $day,
+    return TripListView(hideCompleted: true, hideCommutes: false, selectedDay: $day,
                         hiddenKinds: [], selection: .constant(nil))
         .modelContainer(PreviewData.container)
 }

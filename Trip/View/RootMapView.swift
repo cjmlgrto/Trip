@@ -52,7 +52,7 @@ struct RootMapView: View {
             .mapStyle(.standard(pointsOfInterest: .including([.publicTransport])))
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) { locateButton }
+                ToolbarItem(placement: .topBarLeading) { locateButton }
                 ToolbarItem(placement: .topBarTrailing) { filterMenu }
             }
             .sheet(isPresented: .constant(true)) {

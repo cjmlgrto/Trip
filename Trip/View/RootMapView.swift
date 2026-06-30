@@ -35,6 +35,11 @@ struct RootMapView: View {
                 }
             }
             .ignoresSafeArea()
+            // MapKit has no dedicated "transit" basemap (Apple Maps' transit mode
+            // isn't exposed; the only transit API is launch-directions). The closest
+            // in-app option is the standard style with public-transport points of
+            // interest emphasized — apt for this train- and tube-heavy trip.
+            .mapStyle(.standard(pointsOfInterest: .including([.publicTransport])))
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) { filterMenu }

@@ -23,9 +23,14 @@ struct RootMapView: View {
     @State private var todayOnly = false
     @State private var hiddenKinds: Set<SegmentKind> = []
 
+    // User location, for the blue dot and the re-center control.
+    @State private var location = LocationProvider()
+    @State private var centeredOnUser = false
+
     var body: some View {
         NavigationStack {
             Map(position: $camera, selection: $selected) {
+                UserAnnotation()
                 ForEach(pins) { segment in
                     if let coordinate = segment.coordinate {
                         Marker(segment.title, systemImage: segment.kind.symbol, coordinate: coordinate)
@@ -35,6 +40,11 @@ struct RootMapView: View {
                 }
             }
             .ignoresSafeArea()
+            // Track whether the camera is still framed on the user, so the
+            // re-center control can reflect it (and panning away clears it).
+            .onMapCameraChange(frequency: .onEnd) { context in
+                centeredOnUser = isCentered(on: context.region)
+            }
             // MapKit has no dedicated "transit" basemap (Apple Maps' transit mode
             // isn't exposed; the only transit API is launch-directions). The closest
             // in-app option is the standard style with public-transport points of
@@ -42,6 +52,7 @@ struct RootMapView: View {
             .mapStyle(.standard(pointsOfInterest: .including([.publicTransport])))
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) { locateButton }
                 ToolbarItem(placement: .topBarTrailing) { filterMenu }
             }
             .sheet(isPresented: .constant(true)) {
@@ -62,7 +73,10 @@ struct RootMapView: View {
             detent = .medium
             focusMap()
         }
-        .onAppear { camera = defaultCamera() }
+        .onAppear {
+            camera = defaultCamera()
+            location.start()
+        }
         .onChange(of: segments.count) {
             if selected == nil { withAnimation(.smooth) { camera = defaultCamera() } }
         }
@@ -90,6 +104,48 @@ struct RootMapView: View {
         .presentationDetents([.medium, .large])
         .presentationBackgroundInteraction(.enabled(upThrough: .medium))
         .presentationDragIndicator(.visible)
+    }
+
+    // MARK: Locate toolbar
+
+    /// Re-centers the map on the user. Tinted blue while the camera is framed on
+    /// the user's location, and the primary color (black in light mode) otherwise.
+    private var locateButton: some View {
+        Button {
+            recenterOnUser()
+        } label: {
+            Label("Recenter", systemImage: centeredOnUser ? "location.fill" : "location")
+        }
+        .tint(centeredOnUser ? .blue : .primary)
+    }
+
+    private func recenterOnUser() {
+        guard let coordinate = location.coordinate else {
+            // No fix yet — make sure we're authorized and updating; the dot and
+            // a follow-up tap will land once a location arrives.
+            location.start()
+            return
+        }
+        selected = nil
+        withAnimation(.smooth) { camera = .region(userRegion(coordinate)) }
+    }
+
+    /// A tight region centered on the user, nudged south like the pin framing so
+    /// the dot sits in the map area above the half-sheet.
+    private func userRegion(_ coordinate: CLLocationCoordinate2D) -> MKCoordinateRegion {
+        let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+        let center = CLLocationCoordinate2D(latitude: coordinate.latitude - span.latitudeDelta * 0.2,
+                                            longitude: coordinate.longitude)
+        return MKCoordinateRegion(center: center, span: span)
+    }
+
+    /// Whether the given visible region is still framed on the user, within a
+    /// tolerance scaled to the current zoom.
+    private func isCentered(on region: MKCoordinateRegion) -> Bool {
+        guard let coordinate = location.coordinate else { return false }
+        let target = userRegion(coordinate).center
+        return abs(region.center.latitude - target.latitude) < region.span.latitudeDelta * 0.25
+            && abs(region.center.longitude - target.longitude) < region.span.longitudeDelta * 0.25
     }
 
     // MARK: Filter toolbar

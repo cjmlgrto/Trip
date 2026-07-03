@@ -140,10 +140,11 @@ struct TripWidgetEntryView: View {
             let layout = WidgetLayout.forFamily(family)
             let shown = Array(entry.items.prefix(layout.maxEvents))
             VStack(alignment: .leading, spacing: layout.rowSpacing) {
-                Text(WidgetTripData.longDate(shown.first?.event.start ?? entry.date))
-                    .font(.headline)
+                Text("Up Next")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
                 ForEach(shown) { WidgetEventRow(item: $0, style: layout.row) }
-                Spacer(minLength: 0)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
@@ -151,7 +152,7 @@ struct TripWidgetEntryView: View {
 
     private var emptyState: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Your Trip").font(.headline)
+            Text("Up Next").font(.headline)
             Text("No upcoming events").font(.subheadline).foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -168,7 +169,7 @@ struct TripWidget: Widget {
             TripWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Your Trip")
+        .configurationDisplayName("Up Next")
         .description("Your current and next event.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }

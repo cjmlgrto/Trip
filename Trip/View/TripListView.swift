@@ -29,17 +29,31 @@ struct TripListView: View {
     @State private var showingEdit = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            WeekCalendarBar(days: days, selectedDay: $selectedDay)
-            if !listHidden {
-                itinerary
+        content
+            .task {
+                Seeding.seedIfNeeded(context)
+                WidgetSnapshot.publish(from: context)
             }
+            .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if listHidden {
+            // Collapsed detent: just the calendar row, nothing to scroll under it.
+            VStack(spacing: 0) {
+                WeekCalendarBar(days: days, selectedDay: $selectedDay)
+                Spacer(minLength: 0)
+            }
+        } else {
+            // The itinerary scrolls beneath the calendar bar, which is pinned as a
+            // top bar. The soft scroll edge effect fades/blurs the rows as they
+            // pass under it — matching iOS's soft toolbar edge.
+            itinerary
+                .safeAreaBar(edge: .top, spacing: 0) {
+                    WeekCalendarBar(days: days, selectedDay: $selectedDay)
+                }
         }
-        .task {
-            Seeding.seedIfNeeded(context)
-            WidgetSnapshot.publish(from: context)
-        }
-        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
     }
 
     private var itinerary: some View {
@@ -88,6 +102,7 @@ struct TripListView: View {
         }
         .listStyle(.plain)
         .contentMargins(.top, 16, for: .scrollContent)
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .simultaneousGesture(
             MagnifyGesture()
                 .onChanged { value in

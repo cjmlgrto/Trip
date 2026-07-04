@@ -45,6 +45,19 @@ enum Seeding {
         try? context.save()
     }
 
+    /// Encode the current store back into the trip JSON schema, so the user can
+    /// copy it out, tweak it, and paste it back through the editor. Returns nil
+    /// only if there's nothing to read or encoding fails.
+    static func exportJSON(from context: ModelContext) -> String? {
+        let descriptor = FetchDescriptor<TripDay>(sortBy: [SortDescriptor(\.order)])
+        guard let days = try? context.fetch(descriptor) else { return nil }
+        let file = TripFile(trip: .init(days: days.map(dayDTO)))
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .withoutEscapingSlashes]
+        guard let data = try? encoder.encode(file) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
     /// A short, human-readable reason a payload failed to validate.
     static func describe(_ error: Error) -> String {
         guard let decoding = error as? DecodingError else {
@@ -96,6 +109,35 @@ enum Seeding {
         decode(TripFile.self, from: "trip").trip
     }
 
+    // MARK: Model → DTO (for export)
+
+    private static func dayDTO(_ day: TripDay) -> TripFile.DayDTO {
+        TripFile.DayDTO(date: day.date, label: day.label,
+                        segments: day.orderedSegments.map(segmentDTO))
+    }
+
+    private static func segmentDTO(_ segment: TripSegment) -> TripFile.SegmentDTO {
+        TripFile.SegmentDTO(
+            id: segment.id, type: segment.kindRaw, time: segment.time,
+            title: segment.title, summary: segment.summary, detail: segment.detail,
+            endTime: segment.endTime, info: segment.info, ref: segment.ref,
+            seat: segment.seat, link: segment.link,
+            files: segment.attachments.isEmpty
+                ? nil
+                : segment.attachments.map { TripFile.FileDTO(name: $0.name, label: $0.label) },
+            commute: segment.commuteMode.map {
+                TripFile.CommuteDTO(mode: $0, summary: segment.commuteSummary ?? "")
+            },
+            pin: pinDTO(segment)
+        )
+    }
+
+    private static func pinDTO(_ segment: TripSegment) -> TripFile.PinDTO? {
+        guard let latitude = segment.latitude, let longitude = segment.longitude else { return nil }
+        return TripFile.PinDTO(name: segment.pinName ?? "", lat: latitude, lng: longitude,
+                               address: segment.pinAddress ?? "")
+    }
+
     private static func decode<T: Decodable>(_ type: T.Type, from resource: String) -> T {
         guard let url = Bundle.main.url(forResource: resource, withExtension: "json"),
               let data = try? Data(contentsOf: url) else {
@@ -106,31 +148,31 @@ enum Seeding {
     }
 }
 
-// MARK: - JSON shapes (decode-only)
+// MARK: - JSON shapes
 
-private struct TripFile: Decodable {
+private struct TripFile: Codable {
     let trip: TripDTO
-    struct TripDTO: Decodable {
+    struct TripDTO: Codable {
         let days: [DayDTO]
     }
-    struct DayDTO: Decodable {
+    struct DayDTO: Codable {
         let date, label: String
         let segments: [SegmentDTO]
     }
-    struct SegmentDTO: Decodable {
+    struct SegmentDTO: Codable {
         let id, type, time, title, summary, detail: String
         let endTime, info, ref, seat, link: String?
         let files: [FileDTO]?
         let commute: CommuteDTO?
         let pin: PinDTO?
     }
-    struct FileDTO: Decodable {
+    struct FileDTO: Codable {
         let name, label: String
     }
-    struct CommuteDTO: Decodable {
+    struct CommuteDTO: Codable {
         let mode, summary: String
     }
-    struct PinDTO: Decodable {
+    struct PinDTO: Codable {
         let name: String, lat: Double, lng: Double, address: String
     }
 }

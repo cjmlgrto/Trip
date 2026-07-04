@@ -46,7 +46,6 @@
       }
     },
     {
-      "blur-material" : null,
       "layers" : [
         {
           "blend-mode" : "hard-light",

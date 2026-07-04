@@ -16,6 +16,12 @@ struct WeekCalendarBar: View {
 
     @State private var weekIndex = 0
 
+    /// Layout constants, also used to size the collapsed sheet detent.
+    static let topInset: CGFloat = 24
+    static let rowHeight: CGFloat = 76 - 14
+    /// Full height of the bar (excludes any sheet safe-area padding).
+    static var barHeight: CGFloat { topInset + rowHeight }
+
     /// Fixed Monday-first column headers — every page is a Mon–Sun week.
     private let weekdayLetters = ["M", "T", "W", "T", "F", "S", "S"]
 
@@ -40,13 +46,9 @@ struct WeekCalendarBar: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 76)
+            .frame(height: Self.rowHeight)
         }
-        .padding(.top, 24)
-        // Soft hairline separating the picker from the scrolling itinerary.
-        .overlay(alignment: .bottom) {
-            Rectangle().fill(.quaternary).frame(height: 1)
-        }
+        .padding(.top, Self.topInset)
         .onAppear { ensureSelection() }
         .onChange(of: days.map(\.date)) { ensureSelection() }
         .onChange(of: selectedDay) { syncWeekIndex() }

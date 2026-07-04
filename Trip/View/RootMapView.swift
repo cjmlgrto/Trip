@@ -18,6 +18,10 @@ struct RootMapView: View {
     @State private var detent: PresentationDetent = .medium
     @State private var camera: MapCameraPosition = .automatic
 
+    /// The smallest detent: just the calendar row, with the list hidden. Sized to
+    /// the bar plus room for the home indicator.
+    private let calendarDetent = PresentationDetent.height(WeekCalendarBar.barHeight)
+
     // Filtering lives at the app level (the map's toolbar), shared into the list.
     @State private var hideCompleted = true
     @State private var hideCommutes = false
@@ -59,9 +63,9 @@ struct RootMapView: View {
             }
             .sheet(isPresented: .constant(true)) {
                 TripListView(hideCompleted: hideCompleted, hideCommutes: hideCommutes,
-                             selectedDay: $selectedDay,
+                             selectedDay: $selectedDay, listHidden: detent == calendarDetent,
                              hiddenKinds: hiddenKinds, selection: $selected)
-                    .presentationDetents([.medium, .large], selection: $detent)
+                    .presentationDetents([calendarDetent, .medium, .large], selection: $detent)
                     .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                     .presentationDragIndicator(.visible)
                     .interactiveDismissDisabled()

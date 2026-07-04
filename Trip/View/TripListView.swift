@@ -18,6 +18,8 @@ struct TripListView: View {
     let hideCompleted: Bool
     let hideCommutes: Bool
     @Binding var selectedDay: String?
+    /// When true (the smallest detent), only the calendar row shows.
+    var listHidden: Bool = false
     let hiddenKinds: Set<SegmentKind>
     @Binding var selection: TripSegment?
 
@@ -29,8 +31,15 @@ struct TripListView: View {
     var body: some View {
         VStack(spacing: 0) {
             WeekCalendarBar(days: days, selectedDay: $selectedDay)
-            itinerary
+            if !listHidden {
+                itinerary
+            }
         }
+        .task {
+            Seeding.seedIfNeeded(context)
+            WidgetSnapshot.publish(from: context)
+        }
+        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
     }
 
     private var itinerary: some View {
@@ -105,11 +114,6 @@ struct TripListView: View {
         .sheet(isPresented: $showingEdit) {
             EditTripView()
         }
-        .task {
-            Seeding.seedIfNeeded(context)
-            WidgetSnapshot.publish(from: context)
-        }
-        .onReceive(Timer.publish(every: 60, on: .main, in: .common).autoconnect()) { now = $0 }
     }
 
     @ViewBuilder

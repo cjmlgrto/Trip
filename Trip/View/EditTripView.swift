@@ -35,6 +35,14 @@ struct EditTripView: View {
                     .foregroundStyle(.secondary)
 
                 Button {
+                    copyToClipboard()
+                } label: {
+                    Label("Copy to Clipboard", systemImage: "square.on.square")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.glass)
+
+                Button {
                     pasteFromClipboard()
                 } label: {
                     Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
@@ -107,6 +115,12 @@ struct EditTripView: View {
     }
 
     // MARK: Behavior
+
+    private func copyToClipboard() {
+        guard let json = Seeding.exportJSON(from: context) else { return }
+        UIPasteboard.general.string = json
+        text = json   // load the current trip into the editor too, ready to tweak
+    }
 
     private func pasteFromClipboard() {
         guard let pasted = UIPasteboard.general.string, !pasted.isEmpty else {

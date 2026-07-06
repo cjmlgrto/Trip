@@ -40,6 +40,7 @@
 		0725EE242FF1B19100BBE75E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		0725EE262FF1B19100BBE75E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		076C98F72FF21AB60025F941 /* TripWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TripWidgetExtension.entitlements; sourceTree = "<group>"; };
+		079863CC2FFC385F0082641C /* PROJECT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PROJECT.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -92,6 +93,7 @@
 				0725EE282FF1B19100BBE75E /* TripWidget */,
 				0725EE232FF1B19100BBE75E /* Frameworks */,
 				000000000000000000000020 /* Products */,
+				079863CC2FFC385F0082641C /* PROJECT.md */,
 			);
 			sourceTree = "<group>";
 		};
